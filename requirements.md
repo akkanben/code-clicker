@@ -31,9 +31,7 @@
 ### What will our MVP MVP functionality be?
 
 - Tapping Interaction
-- Store for purchasing generators
-- Option for purchasing upgrades for generators
-- Option for purchasing upgrades for user clicks
+- Purchasable generators and upgrades
 - Increasing scale and range of UI elements
 - Frequent UI re-renders (more frequent than 1 per second)
 - Allow for very large numbers (scale past MAX_VALUE)
@@ -45,8 +43,22 @@
 
 ### What stretch goals are you going to aim for?
 
+- Graceful end game
 - Cloud saves
 - Alternate upgrade pathways ("Crunch" vs "WLB")
 - More art assets per "upgrade".
 - Add sound effects.
 - Idle length upgrades (not indefinite)
+
+## Functional Requirements
+
+- A user can purchase generators that increase the current lines-per-second
+- A user can purchase upgrades for generators that increase their effectiveness
+- A user can purchase upgrades that increase the effectiveness of user clicks
+- A user can leave the app and return with out starting over
+- A user can display purchasable generators and upgrades and dismiss them from view
+
+## Non-Functional Requirements
+
+Code Clicker will have a suit of tests to ensure the display UI is updated accurately. Increasing and decreasing the line currency will happen frequently and will need to be shown reliably. Generator items from the store will appear visible at certain thresholds, these will be verified with testing. The large numbers involved in idle clickers require special care not to incur a overflow, testing will be required to avoid this.
+

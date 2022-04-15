@@ -8,10 +8,10 @@ Fun idle clicker with a coding theme.
 - Robb Alexander
 - Hambalieu Jallow
 
-[Trello](https://trello.com/codeclicker2)   
+[User Stories](https://trello.com/codeclicker2)   
 
 [Team Agreement](./team-agreement.md)   
 
-[Requirements](./requirements.md)
+[Software Requirements](./requirements.md)
 
-[Wireframe](https://excalidraw.com/#room=f2470210340b57ba26cf,r-Mx0zdHFWCZEedJAhICNQ)
+[Wireframes & Domain Modeling ](https://excalidraw.com/#room=f2470210340b57ba26cf,r-Mx0zdHFWCZEedJAhICNQ)
