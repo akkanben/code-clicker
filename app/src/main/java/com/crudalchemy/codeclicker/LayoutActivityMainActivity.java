@@ -8,10 +8,11 @@ import android.widget.TextView;
 
 public class LayoutActivityMainActivity extends AppCompatActivity {
 
-    private int linePerSecond = 1;
+    private double linePerSecond = 25.4556;
     private int perClick = 1;
-    private int currentLineCount = 0;
+    private double currentLineCount = 0;
     private int counter = 0;
+    double partsOfASecond = 0.0;
     GameLoop gameLoop;
     TextView tickerTextView;
 
@@ -42,12 +43,17 @@ public class LayoutActivityMainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            counter++;
-                            if (counter % 100 == 0)
-                                tickerTextView.setText(Integer.toString(currentLineCount++));
+                            if (partsOfASecond < 0.01) {
+                                currentLineCount += linePerSecond;
+                            }
+                            int temp = (int) (currentLineCount + (linePerSecond * partsOfASecond));
+                            tickerTextView.setText(Integer.toString(temp));
                         }
                     });
-                    Thread.sleep(10);
+                    Thread.sleep(100);
+                    partsOfASecond += 0.10;
+                    if (partsOfASecond > 1)
+                        partsOfASecond = 0.00001;
                 }
             } catch (InterruptedException e) {
                 System.out.println(e.toString());
@@ -65,8 +71,9 @@ public class LayoutActivityMainActivity extends AppCompatActivity {
     private void setupClick() {
         Button button = findViewById(R.id.button_main_activity_click);
         button.setOnClickListener(view -> {
-            currentLineCount += perClick;
-            tickerTextView.setText(Integer.toString(currentLineCount));
+            runOnUiThread(() -> {
+                currentLineCount += perClick;
+            });
         });
     }
 
