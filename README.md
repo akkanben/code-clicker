@@ -1,4 +1,5 @@
 # code-clicker
+
 Fun idle clicker with a coding theme.
 
 ## Team Members
@@ -8,8 +9,10 @@ Fun idle clicker with a coding theme.
 - Robb Alexander
 - Hambalieu Jallow
 
-[Trello](https://trello.com/codeclicker2)   
+[User Stories](https://trello.com/codeclicker2)
 
-[Team Agreement](./team-agreement.md)   
+[Team Agreement](./team-agreement.md)
 
-[Wireframe](https://excalidraw.com/#room=f2470210340b57ba26cf,r-Mx0zdHFWCZEedJAhICNQ)
+[Software Requirements](./requirements.md)
+
+[Wireframes & Domain Modeling](https://excalidraw.com/#room=f2470210340b57ba26cf,r-Mx0zdHFWCZEedJAhICNQ)
