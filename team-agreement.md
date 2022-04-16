@@ -9,7 +9,7 @@
 
 - What are the key strengths of each person on the team?
   - Tony Regalado: problem-sovler, determined, optimist, growth mindset, patient, resilient
-  - Robb Alexander: Communication-- Writing skills; Iterative logic; Aesthetic design;
+  - Robb Alexander: Communication & Writing skills; Iterative logic; Aesthetic design;
   - Ben Mills: Patience, technical, design.
   - Hambalieu Jallow: Keeping track of tasks and work flow, debugging, data modeling.
 - How can you best utilize these strengths in the execution of your project?
@@ -54,7 +54,7 @@
 - What is your strategy for ensuring everyone’s voice is heard?
   - communication, ask for feedback/input, assign roles
 - How will you ensure that you are creating a safe environment where everyone feels comfortable speaking up?
-  - Actively solicit opinions, spend time discussing and not just coding. 
+  - Actively solicit opinions, spend time discussing and not just coding.
 
 ## Work Plan
 
