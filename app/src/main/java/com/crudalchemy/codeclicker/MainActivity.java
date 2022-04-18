@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class LayoutActivityMainActivity extends AppCompatActivity {
+import com.crudalchemy.codeclicker.utility.LargeNumbers;
 
-    private double linePerSecond = 25.4556;
+public class MainActivity extends AppCompatActivity {
+
+    private double linePerSecond = 234230.0;
     private int perClick = 1;
     private double currentLineCount = 0;
     private int counter = 0;
@@ -46,8 +48,8 @@ public class LayoutActivityMainActivity extends AppCompatActivity {
                             if (partsOfASecond < 0.01) {
                                 currentLineCount += linePerSecond;
                             }
-                            int temp = (int) (currentLineCount + (linePerSecond * partsOfASecond));
-                            tickerTextView.setText(Integer.toString(temp));
+                            double temp = currentLineCount + (linePerSecond * partsOfASecond);
+                            tickerTextView.setText(LargeNumbers.convert(temp));
                         }
                     });
                     Thread.sleep(100);
