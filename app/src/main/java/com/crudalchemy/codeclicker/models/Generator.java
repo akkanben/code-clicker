@@ -1,14 +1,13 @@
 package com.crudalchemy.codeclicker.models;
 
+import android.graphics.drawable.Drawable;
+
 public class Generator
 {
     String name;
-
-
-
-    String image;
+    Drawable image;
     String description;
-    int count = 1;
+    int count = 0;
     int cost;
     double growthRate;
     double productivityBase;
@@ -16,7 +15,7 @@ public class Generator
     double currentProductivity = productivityBase;
     boolean isVisible;
 
-    public Generator(String name, String image, String description, int cost, double growthRate,
+    public Generator(String name, Drawable image, String description, int cost, double growthRate,
                      double productivityBase)
     {
         this.name = name;
@@ -52,11 +51,11 @@ public class Generator
         this.name = name;
     }
 
-    public String getImage() {
+    public Drawable getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(Drawable image) {
         this.image = image;
     }
 
