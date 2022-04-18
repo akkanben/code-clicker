@@ -13,11 +13,11 @@ public class Generator
     double growthRate;
     double productivityBase;
     int multiplier = 1;
-    double appearThreshold;
     double currentProductivity = productivityBase;
+    boolean isVisible;
 
     public Generator(String name, String image, String description, int cost, double growthRate,
-                     double productivityBase, double appearThreshold)
+                     double productivityBase)
     {
         this.name = name;
         this.image = image;
@@ -25,7 +25,6 @@ public class Generator
         this.cost = cost;
         this.growthRate = growthRate;
         this.productivityBase = productivityBase;
-        this.appearThreshold = appearThreshold;
     }
 
     public int getNextPrice()
@@ -109,14 +108,6 @@ public class Generator
         this.multiplier = multiplier;
     }
 
-    public double getAppearThreshold() {
-        return appearThreshold;
-    }
-
-    public void setAppearThreshold(double appearThreshold) {
-        this.appearThreshold = appearThreshold;
-    }
-
     public double getCurrentProductivity() {
         return currentProductivity;
     }
@@ -125,4 +116,11 @@ public class Generator
         this.currentProductivity = currentProductivity;
     }
 
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(boolean visible) {
+        isVisible = visible;
+    }
 }
