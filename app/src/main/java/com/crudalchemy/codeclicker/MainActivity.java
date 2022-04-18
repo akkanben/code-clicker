@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_main);
+        getSupportActionBar().hide();
         tickerTextView = findViewById(R.id.text_view_main_activity_counter);
         setupClick();
         gameLoop = new GameLoop("game");
