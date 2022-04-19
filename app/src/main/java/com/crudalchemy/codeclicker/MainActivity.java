@@ -1,6 +1,8 @@
 package com.crudalchemy.codeclicker;
 
 import static com.crudalchemy.codeclicker.utility.InitializeStoreItems.hardCodedStoreItems;
+import static com.crudalchemy.codeclicker.utility.SaveIO.readFromFile;
+import static com.crudalchemy.codeclicker.utility.SaveIO.writeToFile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.crudalchemy.codeclicker.utility.LargeNumbers;
+
+import java.io.FileNotFoundException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,9 +28,18 @@ public class MainActivity extends AppCompatActivity {
         tickerTextView = findViewById(R.id.text_view_main_activity_counter);
         setupClick();
         game = new Game();
-        hardCodedStoreItems(game);
+//        hardCodedStoreItems(game);
+//        writeToFile(game, this);
+//        try {
+//            game = readFromFile(this);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+        setUpSaveLoad();
         gameLoop = new GameLoop("game");
         gameLoop.start();
+
+
     }
 
     class GameLoop implements Runnable {
@@ -83,7 +96,23 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void setUpSaveLoad()
+    {
+        Button saveButton = findViewById(R.id.save);
+        Button loadButton = findViewById(R.id.load);
 
+       saveButton.setOnClickListener(view -> {
+           writeToFile(game, MainActivity.this);
+       });
+
+        loadButton.setOnClickListener(view -> {
+            try {
+                game = readFromFile(MainActivity.this);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+    }
 
 
 }
