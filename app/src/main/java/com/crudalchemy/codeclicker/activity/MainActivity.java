@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.crudalchemy.codeclicker.R;
 import com.crudalchemy.codeclicker.adapter.GeneratorMenuRecyclerViewAdapter;
+import com.crudalchemy.codeclicker.adapter.UpgradeMenuRecyclerViewAdapter;
 import com.crudalchemy.codeclicker.utility.LargeNumbers;
 
 import java.io.FileNotFoundException;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tickerTextView;
     TextView linesPerSecondTextView;
     GeneratorMenuRecyclerViewAdapter generatorMenuRecyclerViewAdapter;
+    UpgradeMenuRecyclerViewAdapter upgradeMenuRecyclerViewAdapter;
 
     String helloWorldCodeStr = "class Greeting{ \n   public static void main(String args[]){";
 
@@ -78,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
                                 if (generatorMenuRecyclerViewAdapter != null) {
                                     generatorMenuRecyclerViewAdapter.notifyDataSetChanged();
                                 }
+                                if (upgradeMenuRecyclerViewAdapter != null) {
+                                    upgradeMenuRecyclerViewAdapter.notifyDataSetChanged();
+                                }
                             }
                             double temp = game.currentLineCount + (game.linePerSecond * game.partsOfASecond);
                             tickerTextView.setText(LargeNumbers.convert(temp));
@@ -115,20 +120,39 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupGeneratorButton()
     {
-        Button button = findViewById(R.id.button_main_activity_generators);
-        button.setOnClickListener(view ->
+        Button generatorButton = findViewById(R.id.button_main_activity_generators);
+        Button upgradeButton = findViewById(R.id.button_main_activity_upgrades);
+        Button enterButton = findViewById(R.id.button_main_activity_click);
+        RecyclerView upgradeItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view_upgrades);
+        RecyclerView generatorItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view_generators);
+
+        generatorButton.setOnClickListener(view ->
         {
-            RecyclerView upgradeItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view);
-            Button enterButton = findViewById(R.id.button_main_activity_click);
-            if (upgradeItemListRecyclerView.getVisibility() == View.VISIBLE) {
+            if (generatorItemListRecyclerView.getVisibility() == View.VISIBLE) {
                 enterButton.setVisibility(View.VISIBLE);
+                generatorItemListRecyclerView.setVisibility(View.INVISIBLE);
                 upgradeItemListRecyclerView.setVisibility(View.INVISIBLE);
             }
             else {
                 enterButton.setVisibility(View.INVISIBLE);
-                upgradeItemListRecyclerView.setVisibility(View.VISIBLE);
+                generatorItemListRecyclerView.setVisibility(View.VISIBLE);
+                upgradeItemListRecyclerView.setVisibility(View.INVISIBLE);
             }
         });
+
+        upgradeButton.setOnClickListener(view -> {
+            if (upgradeItemListRecyclerView.getVisibility() == View.VISIBLE) {
+                enterButton.setVisibility(View.VISIBLE);
+                upgradeItemListRecyclerView.setVisibility(View.INVISIBLE);
+                generatorItemListRecyclerView.setVisibility(View.INVISIBLE);
+            }
+            else {
+                enterButton.setVisibility(View.INVISIBLE);
+                upgradeItemListRecyclerView.setVisibility(View.VISIBLE);
+                generatorItemListRecyclerView.setVisibility(View.INVISIBLE);
+            }
+        });
+
     }
 
     private void setUpSaveLoad()
@@ -151,11 +175,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void setupUpgradeItemRecyclerView()
     {
-        RecyclerView upgradeItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        upgradeItemListRecyclerView.setLayoutManager(layoutManager);
+        //UPGRADES
+        RecyclerView upgradeItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view_upgrades);
+        RecyclerView.LayoutManager upgradeLayoutManager = new LinearLayoutManager(this);
+        upgradeItemListRecyclerView.setLayoutManager(upgradeLayoutManager);
+        upgradeMenuRecyclerViewAdapter = new UpgradeMenuRecyclerViewAdapter(game, this);
+        upgradeItemListRecyclerView.setAdapter(upgradeMenuRecyclerViewAdapter);
+
+        //GENERATORS
+        RecyclerView generatorItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view_generators);
+        RecyclerView.LayoutManager generatorLayoutManager = new LinearLayoutManager(this);
+        generatorItemListRecyclerView.setLayoutManager(generatorLayoutManager);
         generatorMenuRecyclerViewAdapter = new GeneratorMenuRecyclerViewAdapter(game, this);
-        upgradeItemListRecyclerView.setAdapter(generatorMenuRecyclerViewAdapter);
+        generatorItemListRecyclerView.setAdapter(generatorMenuRecyclerViewAdapter);
     }
 
 }

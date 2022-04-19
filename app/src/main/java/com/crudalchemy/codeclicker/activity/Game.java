@@ -24,7 +24,7 @@ public class Game {
     //int parcelData;
 
     public Game() {
-        lifetimeLineCount = 0.0;
+        lifetimeLineCount = 1000.0;
         linePerSecond = 0.0;
         linesPerClick = 1;
         currentLineCount = 0.0;

@@ -1,8 +1,5 @@
 package com.crudalchemy.codeclicker.adapter;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,19 +8,23 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.crudalchemy.codeclicker.R;
 import com.crudalchemy.codeclicker.activity.Game;
 import com.crudalchemy.codeclicker.models.Generator;
+import com.crudalchemy.codeclicker.models.Upgrade;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GeneratorMenuRecyclerViewAdapter extends RecyclerView.Adapter<GeneratorMenuRecyclerViewAdapter.GeneratorListViewHolder>
+public class UpgradeMenuRecyclerViewAdapter extends RecyclerView.Adapter<UpgradeMenuRecyclerViewAdapter.UpgradeListViewHolder>
 {
     Game game;
     Context callingActivity;
 
-    public GeneratorMenuRecyclerViewAdapter(Game game, Context callingActivity)
+    public UpgradeMenuRecyclerViewAdapter(Game game, Context callingActivity)
     {
         this.game = game;
         this.callingActivity = callingActivity;
@@ -31,65 +32,64 @@ public class GeneratorMenuRecyclerViewAdapter extends RecyclerView.Adapter<Gener
 
     @NonNull
     @Override
-    public GeneratorListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    public UpgradeListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
         View upgradeItemFragment = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_upgrade_item, parent, false);
-        return new GeneratorListViewHolder(upgradeItemFragment);
+        return new UpgradeListViewHolder(upgradeItemFragment);
     }
 
    @Override
-   public void onBindViewHolder(@NonNull GeneratorListViewHolder holder, int position)
+   public void onBindViewHolder(@NonNull UpgradeListViewHolder holder, int position)
    {
-       List<Generator> generatorList = new ArrayList<>();
-       for (Generator generator : game.getGeneratorList()) {
-           if (generator.isVisible())
-               generatorList.add(generator);
+       List<Upgrade> upgradeArrayList = new ArrayList<>();
+       for (Upgrade upgrade : game.getUpgradeList()) {
+           if (upgrade.isVisible())
+               upgradeArrayList.add(upgrade);
        }
-       Generator currentGenerator = generatorList.get(position);
-       if (currentGenerator.isVisible()) {
+       Upgrade currentUpgrade = upgradeArrayList.get(position);
+       if (currentUpgrade.isVisible()) {
            TextView itemFragmentTitleTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_title_text_view);
            TextView itemFragmentDescriptionTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_description_text_view);
            TextView itemFragmentCostTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_cost_text_view);
            ImageView itemFragmentImageView = (ImageView) holder.itemView.findViewById(R.id.fragment_upgrade_image_view);
 
-           String generatorItemTitle = currentGenerator.getName();
-           String generatorItemDescription = currentGenerator.getDescription();
-           String generatorItemCost = String.valueOf(currentGenerator.getNextPrice());
-           int generatorItemImage = currentGenerator.getImage();
+           String upgradeItemTitle = currentUpgrade.getName();
+           String upgradeItemDescription = currentUpgrade.getDescription();
+           String upgradeItemCost = String.valueOf(currentUpgrade.getCost());
+           int upgradeItemImage = currentUpgrade.getImage();
 
-           itemFragmentTitleTextView.setText(generatorItemTitle);
-           itemFragmentDescriptionTextView.setText(generatorItemDescription);
-           itemFragmentCostTextView.setText((generatorItemCost));
-           itemFragmentImageView.setBackgroundResource(generatorItemImage);
+           itemFragmentTitleTextView.setText(upgradeItemTitle);
+           itemFragmentDescriptionTextView.setText(upgradeItemDescription);
+           itemFragmentCostTextView.setText((upgradeItemCost));
+           itemFragmentImageView.setBackgroundResource(upgradeItemImage);
 
            Button purchaseButton = holder.itemView.findViewById(R.id.fragment_upgrade_purchase_button);
-           if (currentGenerator.getNextPrice() > game.getCurrentLineCount()) {
+           if (currentUpgrade.getCost() > game.getCurrentLineCount()) {
                purchaseButton.setEnabled(false);
            } else {
                purchaseButton.setEnabled(true);
                purchaseButton.setOnClickListener(view -> {
-                   game.buyGenerator(currentGenerator);
-                   GeneratorMenuRecyclerViewAdapter.this.notifyItemChanged(position);
+                   game.buyUpgrade(currentUpgrade);
+                   UpgradeMenuRecyclerViewAdapter.this.notifyItemChanged(position);
                });
            }
        }
-
    }
 
    @Override
    public int getItemCount()
    {
        int count = 0;
-       for (Generator element : game.getGeneratorList()) {
+       for (Upgrade element : game.getUpgradeList()) {
           if (element.isVisible())
               count++;
        }
        return count;
    }
 
-    public static class GeneratorListViewHolder extends RecyclerView.ViewHolder
+    public static class UpgradeListViewHolder extends RecyclerView.ViewHolder
     {
-        public GeneratorListViewHolder(View fragmentItemView)
+        public UpgradeListViewHolder(View fragmentItemView)
         {
             super(fragmentItemView);
         }
