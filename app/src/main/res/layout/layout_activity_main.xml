@@ -20,12 +20,23 @@
 
     <Button
         android:id="@+id/button_main_activity_click"
+        android:layout_width="159dp"
+        android:layout_height="99dp"
+        android:layout_marginBottom="324dp"
+        android:text="Enter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button_main_activity_generators"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="60dp"
-        android:text="Button"
+        android:text="Generators"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_main_activity_upgrades"
+        app:layout_constraintHorizontal_bias="0.592"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -65,11 +76,22 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:background="#673AB7"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.606" />
+
+    <TextView
+        android:id="@+id/text_view_main_activity_lines_per_second"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="lines per second" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
