@@ -5,13 +5,13 @@ public class Upgrade
 {
     Generator generator;
     String name;
-    String image;
+    int image;
     String description;
     int cost;
     UpgradeType type;
     boolean isVisible;
 
-    public Upgrade(String name, String image, String description, int cost, UpgradeType type)
+    public Upgrade(String name, int image, String description, int cost, UpgradeType type)
     {
         this.name = name;
         this.image = image;
@@ -42,11 +42,11 @@ public class Upgrade
         this.name = name;
     }
 
-    public String getImage() {
+    public int getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(int image) {
         this.image = image;
     }
 

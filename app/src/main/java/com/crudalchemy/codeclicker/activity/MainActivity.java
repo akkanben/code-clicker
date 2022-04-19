@@ -1,6 +1,5 @@
-package com.crudalchemy.codeclicker;
+package com.crudalchemy.codeclicker.activity;
 
-import static com.crudalchemy.codeclicker.utility.InitializeStoreItems.hardCodedStoreItems;
 import static com.crudalchemy.codeclicker.utility.SaveIO.readFromFile;
 import static com.crudalchemy.codeclicker.utility.SaveIO.writeToFile;
 
@@ -11,16 +10,18 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.crudalchemy.codeclicker.activity.UpgradeMenuActivity;
+import com.crudalchemy.codeclicker.R;
 import com.crudalchemy.codeclicker.utility.LargeNumbers;
 
 import java.io.FileNotFoundException;
 
 
 public class MainActivity extends AppCompatActivity {
-    Game game;
+    static Game game;
     GameLoop gameLoop;
     TextView tickerTextView;
+
+    String helloWorldCodeStr = "class Greeting{ \n   public static void main(String args[]){";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(view ->
         {
             Intent goToUpgrades = new Intent(MainActivity.this, UpgradeMenuActivity.class);
+
             startActivity(goToUpgrades);
         });
     }

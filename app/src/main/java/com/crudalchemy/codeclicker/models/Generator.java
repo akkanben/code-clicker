@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable;
 public class Generator
 {
     String name;
-    Drawable image;
+    int image;
     String description;
     int count = 0;
     int cost;
@@ -15,7 +15,7 @@ public class Generator
     double currentProductivity = productivityBase;
     boolean isVisible;
 
-    public Generator(String name, Drawable image, String description, int cost, double growthRate,
+    public Generator(String name, int image, String description, int cost, double growthRate,
                      double productivityBase)
     {
         this.name = name;
@@ -51,11 +51,11 @@ public class Generator
         this.name = name;
     }
 
-    public Drawable getImage() {
+    public int getImage() {
         return image;
     }
 
-    public void setImage(Drawable image) {
+    public void setImage(int image) {
         this.image = image;
     }
 

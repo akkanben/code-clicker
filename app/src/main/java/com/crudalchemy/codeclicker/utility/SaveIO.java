@@ -4,7 +4,7 @@ package com.crudalchemy.codeclicker.utility;
 import android.content.Context;
 import android.util.Log;
 
-import com.crudalchemy.codeclicker.Game;
+import com.crudalchemy.codeclicker.activity.Game;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;

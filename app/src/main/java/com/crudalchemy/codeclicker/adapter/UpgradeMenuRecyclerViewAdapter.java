@@ -13,14 +13,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.crudalchemy.codeclicker.R;
+import com.crudalchemy.codeclicker.models.Generator;
+
 import java.util.List;
 
 public class UpgradeMenuRecyclerViewAdapter extends RecyclerView.Adapter<UpgradeMenuRecyclerViewAdapter.UpgradeListViewHolder>
 {
-    List<String> upgradeArrayList;
+    List<Generator> upgradeArrayList;
     Context callingActivity;
 
-    public UpgradeMenuRecyclerViewAdapter(List<String> upgradeArrayList, Context callingActivity)
+    public UpgradeMenuRecyclerViewAdapter(List<Generator> upgradeArrayList, Context callingActivity)
     {
         this.upgradeArrayList = upgradeArrayList;
         this.callingActivity = callingActivity;
@@ -37,12 +39,18 @@ public class UpgradeMenuRecyclerViewAdapter extends RecyclerView.Adapter<Upgrade
    @Override
    public void onBindViewHolder(@NonNull UpgradeListViewHolder holder, int position)
    {
-       TextView itemFragmentTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_title_text_view);
-       ImageView itemFragmentImageView = (ImageView) holder.itemView.findViewById(R.id.fragment_upgrade_image_view);
-       String upgradeItemTitle = upgradeArrayList.get(position);
+       TextView itemFragmentTitleTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_title_text_view);
+       TextView itemFragmentDescriptionTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_description_text_view);
 
-       itemFragmentTextView.setText(upgradeItemTitle);
-       itemFragmentImageView.setBackgroundResource(R.drawable.computer);
+       ImageView itemFragmentImageView = (ImageView) holder.itemView.findViewById(R.id.fragment_upgrade_image_view);
+       String upgradeItemTitle = upgradeArrayList.get(position).getName();
+       String upgradeItemDescription = upgradeArrayList.get(position).getDescription();
+       int upgradeItemImage = upgradeArrayList.get(position).getImage();
+
+       itemFragmentTitleTextView.setText(upgradeItemTitle);
+       itemFragmentDescriptionTextView.setText(upgradeItemDescription);
+       itemFragmentImageView.setBackgroundResource(upgradeItemImage);
+
    }
 
    @Override
