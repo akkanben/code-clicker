@@ -1,9 +1,12 @@
 package com.crudalchemy.codeclicker.activity;
 
+import static com.crudalchemy.codeclicker.utility.InitializeStoreItems.hardCodedStoreItems;
 import static com.crudalchemy.codeclicker.utility.SaveIO.readFromFile;
 import static com.crudalchemy.codeclicker.utility.SaveIO.writeToFile;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,15 +14,17 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.crudalchemy.codeclicker.R;
+import com.crudalchemy.codeclicker.adapter.UpgradeMenuRecyclerViewAdapter;
 import com.crudalchemy.codeclicker.utility.LargeNumbers;
 
 import java.io.FileNotFoundException;
 
 
 public class MainActivity extends AppCompatActivity {
-    static Game game;
+    Game game;
     GameLoop gameLoop;
     TextView tickerTextView;
+    UpgradeMenuRecyclerViewAdapter upgradeMenuRecyclerViewAdapter;
 
     String helloWorldCodeStr = "class Greeting{ \n   public static void main(String args[]){";
 
@@ -30,21 +35,20 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         tickerTextView = findViewById(R.id.text_view_main_activity_counter);
         setupClick();
-
         game = new Game();
-//        hardCodedStoreItems(game);
-//        writeToFile(game, this);
-//        try {
-//            game = readFromFile(this);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
+
+        hardCodedStoreItems(game);
+       /* writeToFile(game, this);
+        try {
+            game = readFromFile(this);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+       }*/
         setUpSaveLoad();
 
         setupUpgradeButton();
         gameLoop = new GameLoop("game");
         gameLoop.start();
-
 
     }
 
@@ -108,9 +112,7 @@ public class MainActivity extends AppCompatActivity {
         Button button = findViewById(R.id.button_main_activity_upgrades);
         button.setOnClickListener(view ->
         {
-            Intent goToUpgrades = new Intent(MainActivity.this, UpgradeMenuActivity.class);
-
-            startActivity(goToUpgrades);
+           setupUpgradeItemRecyclerView();
         });
     }
 
@@ -130,6 +132,16 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void setupUpgradeItemRecyclerView()
+    {
+        RecyclerView upgradeItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        upgradeItemListRecyclerView.setLayoutManager(layoutManager);
+
+        upgradeMenuRecyclerViewAdapter = new UpgradeMenuRecyclerViewAdapter(game.generatorList, this);
+        upgradeItemListRecyclerView.setAdapter(upgradeMenuRecyclerViewAdapter);
     }
 
 }

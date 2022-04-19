@@ -10,10 +10,11 @@
         android:id="@+id/text_view_main_activity_counter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="148dp"
+        android:layout_marginTop="124dp"
         android:text="TextView"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,14 +58,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/main_typed_text_text_view"
-        android:layout_width="150dp"
-        android:layout_height="64dp"
-        android:text="Code Text"
-        app:layout_constraintBottom_toTopOf="@+id/button_main_activity_click"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_main_activity_counter"
-        app:layout_constraintVertical_bias="0.276"
-        tools:layout_editor_absoluteX="125dp" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/upgrade_menu_list_recycler_view"
+        android:layout_width="365dp"
+        android:layout_height="439dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="#673AB7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.606" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,5 @@
 package com.crudalchemy.codeclicker.activity;
 
-import static com.crudalchemy.codeclicker.activity.MainActivity.game;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,25 +29,7 @@ public class UpgradeMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upgrade_menu);
-        setupUpgradeItemRecyclerView();
 
     }
 
-    public void setupUpgradeItemRecyclerView()
-    {
-        RecyclerView upgradeItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        upgradeItemListRecyclerView.setLayoutManager(layoutManager);
-
-        /*upgradeArrayList.add("Test Item One");
-        upgradeArrayList.add("Test Item Two");
-        upgradeArrayList.add("Test Item Three");
-        upgradeArrayList.add("Test Item Four");
-        upgradeArrayList.add("Test Item Five");
-        upgradeArrayList.add("Test Item Six");
-        upgradeArrayList.add("Test Item Seven");*/
-
-        upgradeMenuRecyclerViewAdapter = new UpgradeMenuRecyclerViewAdapter(game.generatorList, this);
-        upgradeItemListRecyclerView.setAdapter(upgradeMenuRecyclerViewAdapter);
-    }
 }
