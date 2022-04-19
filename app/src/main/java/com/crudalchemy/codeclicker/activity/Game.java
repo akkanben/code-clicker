@@ -1,4 +1,7 @@
-package com.crudalchemy.codeclicker;
+package com.crudalchemy.codeclicker.activity;
+
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.crudalchemy.codeclicker.models.Generator;
 import com.crudalchemy.codeclicker.models.Upgrade;
@@ -15,6 +18,10 @@ public class Game {
     double partsOfASecond;
     List<Generator> generatorList;
     List<Upgrade> upgradeList;
+
+
+
+    //int parcelData;
 
     public Game() {
         lifetimeLineCount = 0.0;
@@ -74,4 +81,21 @@ public class Game {
     public void setUpgradeList(List<Upgrade> upgradeList) {
         this.upgradeList = upgradeList;
     }
+
+   /* @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(parcelData);
+    }
+
+    public static final Parcelable.Creator<Game> CREATOR = new Parcelable.Creator<Game>() {
+        public Game createFromParcel(Parcel gameIn) {
+            return new Game(gameIn);
+        }
+    }*/
+
 }
