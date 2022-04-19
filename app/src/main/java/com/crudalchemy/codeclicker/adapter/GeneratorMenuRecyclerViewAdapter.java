@@ -1,11 +1,9 @@
 package com.crudalchemy.codeclicker.adapter;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +15,14 @@ import com.crudalchemy.codeclicker.R;
 import com.crudalchemy.codeclicker.activity.Game;
 import com.crudalchemy.codeclicker.models.Generator;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class UpgradeMenuRecyclerViewAdapter extends RecyclerView.Adapter<UpgradeMenuRecyclerViewAdapter.UpgradeListViewHolder>
+public class GeneratorMenuRecyclerViewAdapter extends RecyclerView.Adapter<GeneratorMenuRecyclerViewAdapter.UpgradeListViewHolder>
 {
     Game game;
     Context callingActivity;
 
-    public UpgradeMenuRecyclerViewAdapter(Game game, Context callingActivity)
+    public GeneratorMenuRecyclerViewAdapter(Game game, Context callingActivity)
     {
         this.game = game;
         this.callingActivity = callingActivity;
@@ -42,23 +39,23 @@ public class UpgradeMenuRecyclerViewAdapter extends RecyclerView.Adapter<Upgrade
    @Override
    public void onBindViewHolder(@NonNull UpgradeListViewHolder holder, int position)
    {
-       List<Generator> upgradeArrayList = game.getGeneratorList();
-       Generator currentGenerator = upgradeArrayList.get(position);
+       List<Generator> generatorList = game.getGeneratorList();
+       Generator currentGenerator = generatorList.get(position);
        if (currentGenerator.isVisible()) {
            TextView itemFragmentTitleTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_title_text_view);
            TextView itemFragmentDescriptionTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_description_text_view);
            TextView itemFragmentCostTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_cost_text_view);
            ImageView itemFragmentImageView = (ImageView) holder.itemView.findViewById(R.id.fragment_upgrade_image_view);
 
-           String upgradeItemTitle = currentGenerator.getName();
-           String upgradeItemDescription = currentGenerator.getDescription();
-           String upgradeItemCost = String.valueOf(currentGenerator.getNextPrice());
-           int upgradeItemImage = currentGenerator.getImage();
+           String generatorItemTitle = currentGenerator.getName();
+           String generatorItemDescription = currentGenerator.getDescription();
+           String generatorItemCost = String.valueOf(currentGenerator.getNextPrice());
+           int generatorItemImage = currentGenerator.getImage();
 
-           itemFragmentTitleTextView.setText(upgradeItemTitle);
-           itemFragmentDescriptionTextView.setText(upgradeItemDescription);
-           itemFragmentCostTextView.setText((upgradeItemCost));
-           itemFragmentImageView.setBackgroundResource(upgradeItemImage);
+           itemFragmentTitleTextView.setText(generatorItemTitle);
+           itemFragmentDescriptionTextView.setText(generatorItemDescription);
+           itemFragmentCostTextView.setText((generatorItemCost));
+           itemFragmentImageView.setBackgroundResource(generatorItemImage);
 
            Button purchaseButton = holder.itemView.findViewById(R.id.fragment_upgrade_purchase_button);
            if (currentGenerator.getNextPrice() > game.getCurrentLineCount()) {
@@ -67,7 +64,7 @@ public class UpgradeMenuRecyclerViewAdapter extends RecyclerView.Adapter<Upgrade
                purchaseButton.setEnabled(true);
                purchaseButton.setOnClickListener(view -> {
                    game.buyGenerator(currentGenerator);
-                   UpgradeMenuRecyclerViewAdapter.this.notifyItemChanged(position);
+                   GeneratorMenuRecyclerViewAdapter.this.notifyItemChanged(position);
                });
            }
        }
