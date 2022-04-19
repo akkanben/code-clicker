@@ -7,7 +7,7 @@ public class Generator
     String name;
     int image;
     String description;
-    int count = 0;
+    int count = 1;
     int cost;
     double growthRate;
     double productivityBase;
