@@ -2,10 +2,12 @@ package com.crudalchemy.codeclicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.crudalchemy.codeclicker.activity.UpgradeMenuActivity;
 import com.crudalchemy.codeclicker.utility.LargeNumbers;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.layout_activity_main);
         tickerTextView = findViewById(R.id.text_view_main_activity_counter);
         setupClick();
+        setupUpgradeButton();
         gameLoop = new GameLoop("game");
         gameLoop.start();
     }
@@ -79,5 +82,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void setupUpgradeButton()
+    {
+        Button button = findViewById(R.id.button_main_activity_upgrades);
+        button.setOnClickListener(view ->
+        {
+            Intent goToUpgrades = new Intent(MainActivity.this, UpgradeMenuActivity.class);
+            startActivity(goToUpgrades);
+        });
+    }
 
 }
