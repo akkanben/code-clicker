@@ -1,5 +1,9 @@
 package com.crudalchemy.codeclicker;
 
+import static com.crudalchemy.codeclicker.utility.InitializeStoreItems.hardCodedStoreItems;
+import static com.crudalchemy.codeclicker.utility.SaveIO.readFromFile;
+import static com.crudalchemy.codeclicker.utility.SaveIO.writeToFile;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,13 +14,11 @@ import android.widget.TextView;
 import com.crudalchemy.codeclicker.activity.UpgradeMenuActivity;
 import com.crudalchemy.codeclicker.utility.LargeNumbers;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.FileNotFoundException;
 
-    private double linePerSecond = 234230.0;
-    private int perClick = 1;
-    private double currentLineCount = 0;
-    private int counter = 0;
-    double partsOfASecond = 0.0;
+
+public class MainActivity extends AppCompatActivity {
+    Game game;
     GameLoop gameLoop;
     TextView tickerTextView;
 
@@ -24,11 +26,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_main);
+        getSupportActionBar().hide();
         tickerTextView = findViewById(R.id.text_view_main_activity_counter);
         setupClick();
+
+        game = new Game();
+//        hardCodedStoreItems(game);
+//        writeToFile(game, this);
+//        try {
+//            game = readFromFile(this);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+        setUpSaveLoad();
+
         setupUpgradeButton();
         gameLoop = new GameLoop("game");
         gameLoop.start();
+
+
     }
 
     class GameLoop implements Runnable {
@@ -48,17 +64,19 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (partsOfASecond < 0.01) {
-                                currentLineCount += linePerSecond;
+                            if (game.partsOfASecond < 0.01) {
+                                game.lifetimeLineCount += game.linePerSecond;
+                                game.currentLineCount += game.linePerSecond;
+                                game.checkForVisibilityToggle();
                             }
-                            double temp = currentLineCount + (linePerSecond * partsOfASecond);
+                            double temp = game.currentLineCount + (game.linePerSecond * game.partsOfASecond);
                             tickerTextView.setText(LargeNumbers.convert(temp));
                         }
                     });
                     Thread.sleep(100);
-                    partsOfASecond += 0.10;
-                    if (partsOfASecond > 1)
-                        partsOfASecond = 0.00001;
+                    game.partsOfASecond += 0.10;
+                    if (game.partsOfASecond > 1)
+                        game.partsOfASecond = 0.00001;
                 }
             } catch (InterruptedException e) {
                 System.out.println(e.toString());
@@ -77,10 +95,12 @@ public class MainActivity extends AppCompatActivity {
         Button button = findViewById(R.id.button_main_activity_click);
         button.setOnClickListener(view -> {
             runOnUiThread(() -> {
-                currentLineCount += perClick;
+                game.lifetimeLineCount += game.linesPerClick;
+                game.currentLineCount += game.linesPerClick;
             });
         });
     }
+
 
     private void setupUpgradeButton()
     {
@@ -89,6 +109,24 @@ public class MainActivity extends AppCompatActivity {
         {
             Intent goToUpgrades = new Intent(MainActivity.this, UpgradeMenuActivity.class);
             startActivity(goToUpgrades);
+        });
+    }
+
+    private void setUpSaveLoad()
+    {
+        Button saveButton = findViewById(R.id.save);
+        Button loadButton = findViewById(R.id.load);
+
+       saveButton.setOnClickListener(view -> {
+           writeToFile(game, MainActivity.this);
+       });
+
+        loadButton.setOnClickListener(view -> {
+            try {
+                game = readFromFile(MainActivity.this);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         });
     }
 
