@@ -59,12 +59,13 @@
 
     <TextView
         android:id="@+id/main_typed_text_text_view"
-        android:layout_width="150dp"
-        android:layout_height="64dp"
+        android:layout_width="174dp"
+        android:layout_height="105dp"
         android:text="Code Text"
         app:layout_constraintBottom_toTopOf="@+id/button_main_activity_click"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_main_activity_counter"
-        app:layout_constraintVertical_bias="0.276"
-        tools:layout_editor_absoluteX="125dp" />
+        app:layout_constraintVertical_bias="0.276" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

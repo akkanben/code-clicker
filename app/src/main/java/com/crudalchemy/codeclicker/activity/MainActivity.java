@@ -21,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
     GameLoop gameLoop;
     TextView tickerTextView;
 
-    String helloWorldCodeStr = "class Greeting{ \n   public static void main(String args[]){";
+    String helloWorldCodeStr = "class Greeting{ \n   public static void main(String args[]){\n      System.out.println(\"Hello World!\");\n   }\n}";
+    int codeStrIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(() -> {
                 game.lifetimeLineCount += game.linesPerClick;
                 game.currentLineCount += game.linesPerClick;
+                animateKeyPress();
             });
         });
     }
@@ -130,6 +132,20 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void animateKeyPress(){
+
+        if(codeStrIndex >= helloWorldCodeStr.length()){
+            codeStrIndex = 0;
+        }
+
+        String codeStrSubstr = helloWorldCodeStr.substring(0, codeStrIndex);
+        TextView typedCodeTextView = (TextView) findViewById(R.id.main_typed_text_text_view);
+        typedCodeTextView.setText(codeStrSubstr);
+
+        codeStrIndex++;
+
     }
 
 }
