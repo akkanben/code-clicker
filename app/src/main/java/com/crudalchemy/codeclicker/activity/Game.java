@@ -28,7 +28,7 @@ public class Game {
     //int parcelData;
 
     public Game() {
-        lifetimeLineCount = 1000.0;
+        lifetimeLineCount = 0.0;
         linePerSecond = 0.0;
         linesPerClick = 1;
         currentLineCount = 0.0;
@@ -39,7 +39,8 @@ public class Game {
 
     public void buyGenerator(Generator generator) {
         currentLineCount -= generator.getNextPrice();
-        linePerSecond += generator.getNextProductivity();
+        //linePerSecond += generator.getCurrentProductivity();
+        linePerSecond += generator.rateIncreaseTest();
         generator.add();
     }
 
@@ -49,7 +50,7 @@ public class Game {
                 upgrade.increaseMultiplier();
                 break;
             case GLOBAL_LINE_PRODUCTION_MULTIPLIER:
-                linePerSecond *= 0.01;
+                linePerSecond *= 1.01;
                 break;
             case CLICK_EFFICIENCY:
                 linesPerClick *= 2;
