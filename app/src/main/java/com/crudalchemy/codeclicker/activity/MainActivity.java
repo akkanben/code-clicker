@@ -8,9 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.media.AudioAttributes;
-import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +21,7 @@ import com.crudalchemy.codeclicker.adapter.UpgradeMenuRecyclerViewAdapter;
 import com.crudalchemy.codeclicker.utility.LargeNumbers;
 
 import java.io.FileNotFoundException;
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,20 +32,17 @@ public class MainActivity extends AppCompatActivity {
     TextView tickerTextView;
     TextView linesPerSecondTextView;
     SoundPool soundPool;
-    int keyA, keyB, keyC;
+    int[] keyPressesArray;
     GeneratorMenuRecyclerViewAdapter generatorMenuRecyclerViewAdapter;
     UpgradeMenuRecyclerViewAdapter upgradeMenuRecyclerViewAdapter;
 
     ArrayList<String> codeTextStringList = new ArrayList<>();
-
     String currentCodeTextStr;
     String helloWorldCodeStr = "class Greeting{ \n\tpublic static void main(String args[]){\n\t\tSystem.out.println(\"Hello World!\");\n\t}\n}";
     String recursiveRemoveCodeStr = "rm -rf *";
     String infiniteOkayCodeStr = "while(true){\n\tSystem.out.println(\"EVERYTHING IS FINE\");\n}";
-
     int codeTextStrIndex = 0;
     int codeTextStringListIndex = 0;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,25 +64,8 @@ public class MainActivity extends AppCompatActivity {
         tickerTextView = findViewById(R.id.text_view_main_activity_counter);
         linesPerSecondTextView = findViewById(R.id.text_view_main_activity_lines_per_second);
         setupClick();
+        setupKeyboardSounds();
         game = new Game();
-
-        AudioAttributes audioAttributes = new AudioAttributes
-                .Builder()
-                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .build();
-
-        soundPool = new SoundPool
-                .Builder()
-                .setMaxStreams(3)
-                .setAudioAttributes(audioAttributes)
-                .build();
-
-        keyA = soundPool.load(this, R.raw.key2, 1);
-        keyB= soundPool.load(this, R.raw.key2, 1);
-        keyC = soundPool.load(this, R.raw.key2, 1);
-
-
         hardCodedStoreItems(game);
        /* writeToFile(game, this);
         try {
@@ -158,15 +137,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupClick() {
         Button button = findViewById(R.id.button_main_activity_click);
-
         button.setOnClickListener(view -> {
             runOnUiThread(() -> {
-                soundPool.play(keyA, 1,1,1,0,1);
+                playRandomKeyboardPressSound();
                 game.lifetimeLineCount += game.linesPerClick;
                 game.currentLineCount += game.linesPerClick;
                 animateKeyPress();
             });
-
         });
     }
 
@@ -212,11 +189,9 @@ public class MainActivity extends AppCompatActivity {
     {
         Button saveButton = findViewById(R.id.save);
         Button loadButton = findViewById(R.id.load);
-
-       saveButton.setOnClickListener(view -> {
-           writeToFile(game, MainActivity.this);
-       });
-
+        saveButton.setOnClickListener(view -> {
+            writeToFile(game, MainActivity.this);
+        });
         loadButton.setOnClickListener(view -> {
             try {
                 game = readFromFile(MainActivity.this);
@@ -263,9 +238,30 @@ public class MainActivity extends AppCompatActivity {
         generatorItemListRecyclerView.setAdapter(generatorMenuRecyclerViewAdapter);
     }
 
-    public void playKeyboardPressSound(Context context)
-    {
+    public void playRandomKeyboardPressSound() {
+        Random rand = new Random();
+        soundPool.play(keyPressesArray[rand.nextInt(5)], (float) 0.65, (float) 0.65,1,0, 1);
+    }
 
+    private void setupKeyboardSounds() {
+        AudioAttributes audioAttributes = new AudioAttributes
+                .Builder()
+                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+        soundPool = new SoundPool
+                .Builder()
+                .setMaxStreams(5)
+                .setAudioAttributes(audioAttributes)
+                .build();
+        int keyA = soundPool.load(this, R.raw.new_key01, 1);
+        int keyB = soundPool.load(this, R.raw.new_key02, 1);
+        int keyC = soundPool.load(this, R.raw.new_key03, 1);
+        int keyD = soundPool.load(this, R.raw.new_key04, 1);
+        int keyE = soundPool.load(this, R.raw.new_key05, 1);
+        keyPressesArray = new int[]{keyA, keyB, keyC, keyD, keyE};
+        // Workaround for laggy sound
+        soundPool.play(keyPressesArray[0], 0, 0, 1, -1, 1f);
     }
 
 }
