@@ -14,6 +14,8 @@ import com.crudalchemy.codeclicker.R;
 import com.crudalchemy.codeclicker.utility.LargeNumbers;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -21,13 +23,33 @@ public class MainActivity extends AppCompatActivity {
     GameLoop gameLoop;
     TextView tickerTextView;
 
-    String helloWorldCodeStr = "class Greeting{ \n   public static void main(String args[]){\n      System.out.println(\"Hello World!\");\n   }\n}";
-    int codeStrIndex = 0;
+    ArrayList<String> codeTextStringList = new ArrayList<>();
+
+    String currentCodeTextStr;
+    String helloWorldCodeStr = "class Greeting{ \n\tpublic static void main(String args[]){\n\t\tSystem.out.println(\"Hello World!\");\n\t}\n}";
+    String recursiveRemoveCodeStr = "rm -rf *";
+    String infiniteOkayCodeStr = "while(true){\n\tSystem.out.println(\"EVERYTHING IS FINE\");\n}";
+
+    int codeTextStrIndex = 0;
+    int codeTextStringListIndex = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_main);
+
+        codeTextStringList.add(helloWorldCodeStr);
+        codeTextStringList.add(recursiveRemoveCodeStr);
+        codeTextStringList.add(infiniteOkayCodeStr);
+        /*codeTextStringList.add();
+        codeTextStringList.add();
+        codeTextStringList.add();
+        codeTextStringList.add();
+        codeTextStringList.add();*/
+
+        currentCodeTextStr = codeTextStringList.get(0);
+
         getSupportActionBar().hide();
         tickerTextView = findViewById(R.id.text_view_main_activity_counter);
         setupClick();
@@ -136,15 +158,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void animateKeyPress(){
 
-        if(codeStrIndex >= helloWorldCodeStr.length()){
-            codeStrIndex = 0;
-        }
+        if(codeTextStrIndex >= currentCodeTextStr.length()){
+            codeTextStrIndex = 0;
+            if(codeTextStringListIndex >= codeTextStringList.size() - 1){
+                currentCodeTextStr = codeTextStringList.get(0);
+            } else {
+                currentCodeTextStr = codeTextStringList.get(codeTextStringListIndex + 1);
+                codeTextStringListIndex++;
+            }
 
-        String codeStrSubstr = helloWorldCodeStr.substring(0, codeStrIndex);
+        }
+        String cursor = "█";
+        String codeStrSubstr = currentCodeTextStr.substring(0, codeTextStrIndex) + cursor;
         TextView typedCodeTextView = (TextView) findViewById(R.id.main_typed_text_text_view);
         typedCodeTextView.setText(codeStrSubstr);
 
-        codeStrIndex++;
+        codeTextStrIndex++;
 
     }
 
