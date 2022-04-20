@@ -24,7 +24,7 @@ public class Game {
     //int parcelData;
 
     public Game() {
-        lifetimeLineCount = 0.0;
+        lifetimeLineCount = 1000.0;
         linePerSecond = 0.0;
         linesPerClick = 1;
         currentLineCount = 0.0;
@@ -82,20 +82,7 @@ public class Game {
         this.upgradeList = upgradeList;
     }
 
-   /* @Override
-    public int describeContents() {
-        return 0;
+    public double getCurrentLineCount() {
+        return currentLineCount;
     }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(parcelData);
-    }
-
-    public static final Parcelable.Creator<Game> CREATOR = new Parcelable.Creator<Game>() {
-        public Game createFromParcel(Parcel gameIn) {
-            return new Game(gameIn);
-        }
-    }*/
-
 }
