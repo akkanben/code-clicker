@@ -1,9 +1,19 @@
 package com.crudalchemy.codeclicker.models;
 
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+import androidx.room.Relation;
 
+@Entity
 public class Upgrade
 {
+    @PrimaryKey(autoGenerate = true)
+    public Long id;
+    @Ignore
     Generator generator;
+    String generatorName;
     String name;
     int image;
     String description;
@@ -34,6 +44,7 @@ public class Upgrade
 
     public void setGenerator(Generator generator) {
         this.generator = generator;
+        generatorName = generator.getName();
     }
 
     public String getName() {
@@ -90,5 +101,13 @@ public class Upgrade
 
     public void setPurchased(boolean purchased) {
         this.purchased = purchased;
+    }
+
+    public String getGeneratorName() {
+        return generatorName;
+    }
+
+    public void setGeneratorName(String generatorName) {
+        this.generatorName = generatorName;
     }
 }

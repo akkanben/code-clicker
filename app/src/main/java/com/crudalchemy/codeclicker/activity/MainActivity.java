@@ -7,6 +7,8 @@ import static com.crudalchemy.codeclicker.utility.SaveIO.writeToFile;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 
 import android.app.Dialog;
@@ -20,6 +22,9 @@ import android.widget.TextView;
 import com.crudalchemy.codeclicker.R;
 import com.crudalchemy.codeclicker.adapter.GeneratorMenuRecyclerViewAdapter;
 import com.crudalchemy.codeclicker.adapter.UpgradeMenuRecyclerViewAdapter;
+import com.crudalchemy.codeclicker.models.Generator;
+import com.crudalchemy.codeclicker.models.Upgrade;
+import com.crudalchemy.codeclicker.room.CodeClickerDatabase;
 import com.crudalchemy.codeclicker.utility.LargeNumbers;
 
 import java.io.FileNotFoundException;
@@ -37,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     int[] keyPressesArray;
     GeneratorMenuRecyclerViewAdapter generatorMenuRecyclerViewAdapter;
     UpgradeMenuRecyclerViewAdapter upgradeMenuRecyclerViewAdapter;
+    CodeClickerDatabase codeClickerDatabase;
 
 
     GeneratorMenuRecyclerViewAdapter generatorAdapter;
@@ -74,6 +80,16 @@ public class MainActivity extends AppCompatActivity {
         linesPerSecondTextView = findViewById(R.id.text_view_main_activity_lines_per_second);
         setupClick();
         setupKeyboardSounds();
+
+        // setting up room database
+        codeClickerDatabase = Room.databaseBuilder(
+                getApplicationContext(),
+                CodeClickerDatabase.class,
+                "codeClicker")
+                .allowMainThreadQueries() // TODO: remove this at some point.
+                .fallbackToDestructiveMigration()
+                .build();
+
         game = new Game();
         hardCodedStoreItems(game);
        /* writeToFile(game, this);
@@ -203,7 +219,17 @@ public class MainActivity extends AppCompatActivity {
         Button saveButton = findViewById(R.id.save);
         Button loadButton = findViewById(R.id.load);
         saveButton.setOnClickListener(view -> {
-            writeToFile(game, MainActivity.this);
+//            writeToFile(game, MainActivity.this);
+            codeClickerDatabase.dao().clearGame();
+            codeClickerDatabase.dao().clearGenerator();
+            codeClickerDatabase.dao().clearUpgrade();
+            codeClickerDatabase.dao().insertGame(game);
+            for(Generator generator : game.getGeneratorList()) {
+                codeClickerDatabase.dao().insertGenerator(generator);
+            }
+            for(Upgrade upgrade : game.getUpgradeList()) {
+                codeClickerDatabase.dao().insertUpgrade(upgrade);
+            }
         });
         loadButton.setOnClickListener(view -> {
             try {
