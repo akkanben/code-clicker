@@ -38,17 +38,24 @@ public class MainActivity extends AppCompatActivity {
     GeneratorMenuRecyclerViewAdapter generatorMenuRecyclerViewAdapter;
     UpgradeMenuRecyclerViewAdapter upgradeMenuRecyclerViewAdapter;
 
-
     GeneratorMenuRecyclerViewAdapter generatorAdapter;
     UpgradeMenuRecyclerViewAdapter upgradeAdapter;
 
-    String helloWorldCodeStr = "class Greeting{ \n   public static void main(String args[]){";
-
     ArrayList<String> codeTextStringList = new ArrayList<>();
     String currentCodeTextStr;
-    String helloWorldCodeStr = "class Greeting{ \n\tpublic static void main(String args[]){\n\t\tSystem.out.println(\"Hello World!\");\n\t}\n}";
-    String recursiveRemoveCodeStr = "rm -rf *";
-    String infiniteOkayCodeStr = "while(true){\n\tSystem.out.println(\"EVERYTHING IS FINE\");\n}";
+    String helloWorldCodeStr = "class Greeting{ \n\tpublic static void main(String args[]){\n\t\tSystem.out.println( \"Hello World!\");\n\t}\n} ";
+    //String recursiveRemoveCodeStr = "public String globalThermonuclearWar(File dir){\n\tFile[] filesInDir = dir.listFiles();\n\tif(filesInDir != null){\n\t\tfor(File file : filesInDir) {\n\t\t\tdeleteDirectory(file);\n\t\t}\n\t\n\treturn \"Shall we play a game?\"" ;
+    String infiniteOkayCodeStr = "while(true){\n\tSystem.out.println(\"EVERYTHING IS FINE\");\n} ";
+    String brevityExceptionCodeStr = "public String javaCode(String perfectlyFineCode) throws VerbosityException {\n\treturn \"Abstract \" + perfectlyFineCode + \"FactoryFactory\"\n} ";
+    String testCodeStr1 = "Testing";
+    String testCodeStr2 = "Test it again";
+    String testCodeStr3 = "Third test";
+    String a5 = "";
+    String a6 = "";
+    String a7 = "";
+    String a8 = "";
+    String a9 = "";
+
     int codeTextStrIndex = 0;
     int codeTextStringListIndex = 0;
 
@@ -58,14 +65,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_main);
 
-        codeTextStringList.add(helloWorldCodeStr);
-        codeTextStringList.add(recursiveRemoveCodeStr);
-        codeTextStringList.add(infiniteOkayCodeStr);
-        /*codeTextStringList.add();
-        codeTextStringList.add();
-        codeTextStringList.add();
-        codeTextStringList.add();
-        codeTextStringList.add();*/
+        codeTextStringList.add(testCodeStr1);
+        //codeTextStringList.add(helloWorldCodeStr);
+        //codeTextStringList.add(recursiveRemoveCodeStr);
+        //codeTextStringList.add(infiniteOkayCodeStr);
+        //codeTextStringList.add(brevityExceptionCodeStr);
+        codeTextStringList.add(testCodeStr2);
+        codeTextStringList.add(testCodeStr3);
+        //codeTextStringList.add();
 
         currentCodeTextStr = codeTextStringList.get(0);
 
@@ -220,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
             codeTextStrIndex = 0;
             if(codeTextStringListIndex >= codeTextStringList.size() - 1){
                 currentCodeTextStr = codeTextStringList.get(0);
+                codeTextStringListIndex = 0;
             } else {
                 currentCodeTextStr = codeTextStringList.get(codeTextStringListIndex + 1);
                 codeTextStringListIndex++;
