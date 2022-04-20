@@ -1,5 +1,6 @@
 package com.crudalchemy.codeclicker.activity;
 
+import static com.crudalchemy.codeclicker.models.UpgradeType.GENERATOR_EFFICIENCY;
 import static com.crudalchemy.codeclicker.utility.InitializeStoreItems.hardCodedStoreItems;
 import static com.crudalchemy.codeclicker.utility.SaveIO.readFromFile;
 import static com.crudalchemy.codeclicker.utility.SaveIO.writeToFile;
@@ -31,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -43,12 +45,8 @@ public class MainActivity extends AppCompatActivity {
     GeneratorMenuRecyclerViewAdapter generatorMenuRecyclerViewAdapter;
     UpgradeMenuRecyclerViewAdapter upgradeMenuRecyclerViewAdapter;
     CodeClickerDatabase codeClickerDatabase;
-
-
     GeneratorMenuRecyclerViewAdapter generatorAdapter;
     UpgradeMenuRecyclerViewAdapter upgradeAdapter;
-
-//    String helloWorldCodeStr = "class Greeting{ \n   public static void main(String args[]){";
 
     ArrayList<String> codeTextStringList = new ArrayList<>();
     String currentCodeTextStr;
@@ -57,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
     String infiniteOkayCodeStr = "while(true){\n\tSystem.out.println(\"EVERYTHING IS FINE\");\n}";
     int codeTextStrIndex = 0;
     int codeTextStringListIndex = 0;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,21 +89,13 @@ public class MainActivity extends AppCompatActivity {
 
         game = new Game();
         hardCodedStoreItems(game);
-       /* writeToFile(game, this);
-        try {
-            game = readFromFile(this);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-       }*/
         setUpSaveLoad();
-//        setupGeneratorButton();
         setupUpgradeItemRecyclerView();
         gameLoop = new GameLoop("game");
         gameLoop.start();
 
         setupPopupGeneratorButton();
         setupPopupUpgradesButton();
-
     }
 
     class GameLoop implements Runnable {
@@ -143,8 +132,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-
-
                     Thread.sleep(100);
                     game.partsOfASecond += 0.10;
                     if (game.partsOfASecond > 1)
@@ -174,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
             });
         });
     }
-
 
 //    private void setupGeneratorButton()
 //    {
@@ -213,13 +199,11 @@ public class MainActivity extends AppCompatActivity {
 //
 //    }
 
-
     private void setUpSaveLoad()
     {
         Button saveButton = findViewById(R.id.save);
         Button loadButton = findViewById(R.id.load);
         saveButton.setOnClickListener(view -> {
-//            writeToFile(game, MainActivity.this);
             codeClickerDatabase.dao().clearGame();
             codeClickerDatabase.dao().clearGenerator();
             codeClickerDatabase.dao().clearUpgrade();
@@ -232,11 +216,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         loadButton.setOnClickListener(view -> {
-            try {
-                game = readFromFile(MainActivity.this);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            List<Generator> generatorList = codeClickerDatabase.dao().findAllGenerators();
+            List<Upgrade> upgradeList = codeClickerDatabase.dao().findAllUpgrades();
+            for(Upgrade upgrade : upgradeList)
+            {
+                if(upgrade.getType().equals(GENERATOR_EFFICIENCY))
+                {
+                    String generatorName = upgrade.getGeneratorName();
+                    List<Generator> generators = generatorList.stream().filter(element -> element.getName().equals(generatorName)).collect(Collectors.toList());
+                    upgrade.setGenerator(generators.get(0));
+                }
             }
+            game = codeClickerDatabase.dao().find();
+            game.setGeneratorList(generatorList);
+            game.setUpgradeList(upgradeList);
         });
     }
 
@@ -250,13 +243,11 @@ public class MainActivity extends AppCompatActivity {
                 currentCodeTextStr = codeTextStringList.get(codeTextStringListIndex + 1);
                 codeTextStringListIndex++;
             }
-
         }
         String cursor = "█";
         String codeStrSubstr = currentCodeTextStr.substring(0, codeTextStrIndex) + cursor;
         TextView typedCodeTextView = (TextView) findViewById(R.id.main_typed_text_text_view);
         typedCodeTextView.setText(codeStrSubstr);
-
         codeTextStrIndex++;
     }
   
@@ -275,7 +266,6 @@ public class MainActivity extends AppCompatActivity {
         generatorItemListRecyclerView.setLayoutManager(generatorLayoutManager);
         generatorMenuRecyclerViewAdapter = new GeneratorMenuRecyclerViewAdapter(game, this);
         generatorItemListRecyclerView.setAdapter(generatorMenuRecyclerViewAdapter);
-
     }
 
     public void setupPopupGeneratorButton()
@@ -298,7 +288,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void showPopupGeneratorDialogBox()
     {
-
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.popup_generator);
@@ -312,7 +301,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void showPopupUpgradesDialogBox()
     {
-
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.popup_upgrades);
@@ -324,7 +312,8 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    public void playRandomKeyboardPressSound() {
+    public void playRandomKeyboardPressSound()
+    {
         Random rand = new Random();
         soundPool.play(keyPressesArray[rand.nextInt(5)], (float) 0.65, (float) 0.65,1,0, 1);
     }
@@ -349,5 +338,4 @@ public class MainActivity extends AppCompatActivity {
         // Workaround for laggy sound
         soundPool.play(keyPressesArray[0], 0, 0, 1, -1, 1f);
     }
-
 }
