@@ -8,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.media.AudioAttributes;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     GameLoop gameLoop;
     TextView tickerTextView;
     TextView linesPerSecondTextView;
+    SoundPool soundPool;
+    int keyA, keyB, keyC;
     GeneratorMenuRecyclerViewAdapter generatorMenuRecyclerViewAdapter;
     UpgradeMenuRecyclerViewAdapter upgradeMenuRecyclerViewAdapter;
 
@@ -40,6 +46,23 @@ public class MainActivity extends AppCompatActivity {
         linesPerSecondTextView = findViewById(R.id.text_view_main_activity_lines_per_second);
         setupClick();
         game = new Game();
+
+        AudioAttributes audioAttributes = new AudioAttributes
+                .Builder()
+                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+
+        soundPool = new SoundPool
+                .Builder()
+                .setMaxStreams(3)
+                .setAudioAttributes(audioAttributes)
+                .build();
+
+        keyA = soundPool.load(this, R.raw.key2, 1);
+        keyB= soundPool.load(this, R.raw.key2, 1);
+        keyC = soundPool.load(this, R.raw.key2, 1);
+
 
         hardCodedStoreItems(game);
        /* writeToFile(game, this);
@@ -89,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
                             linesPerSecondTextView.setText(Double.toString(game.linePerSecond) + " lines/second");
                         }
                     });
+
+
+
                     Thread.sleep(100);
                     game.partsOfASecond += 0.10;
                     if (game.partsOfASecond > 1)
@@ -109,11 +135,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupClick() {
         Button button = findViewById(R.id.button_main_activity_click);
+
         button.setOnClickListener(view -> {
             runOnUiThread(() -> {
+                soundPool.play(keyA, 1,1,1,0,1);
                 game.lifetimeLineCount += game.linesPerClick;
                 game.currentLineCount += game.linesPerClick;
             });
+
         });
     }
 
@@ -188,6 +217,11 @@ public class MainActivity extends AppCompatActivity {
         generatorItemListRecyclerView.setLayoutManager(generatorLayoutManager);
         generatorMenuRecyclerViewAdapter = new GeneratorMenuRecyclerViewAdapter(game, this);
         generatorItemListRecyclerView.setAdapter(generatorMenuRecyclerViewAdapter);
+    }
+
+    public void playKeyboardPressSound(Context context)
+    {
+
     }
 
 }
