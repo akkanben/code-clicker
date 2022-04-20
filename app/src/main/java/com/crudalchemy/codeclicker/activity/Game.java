@@ -1,8 +1,5 @@
 package com.crudalchemy.codeclicker.activity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.crudalchemy.codeclicker.models.Generator;
 import com.crudalchemy.codeclicker.models.Upgrade;
 
@@ -42,7 +39,6 @@ public class Game {
     public void buyUpgrade(Upgrade upgrade) {
         switch (upgrade.getType()) {
             case GENERATOR_EFFICIENCY:
-                currentLineCount -= upgrade.getCost();
                 upgrade.increaseMultiplier();
                 break;
             case GLOBAL_LINE_PRODUCTION_MULTIPLIER:
@@ -52,12 +48,14 @@ public class Game {
                 linesPerClick *= 2;
                 break;
         }
+        upgrade.setPurchased(true);
         upgradeList.remove(upgrade);
+        currentLineCount -= upgrade.getCost();
     }
 
     public void checkForVisibilityToggle() {
         for (Generator generator : generatorList) {
-            if (!generator.isVisible() && generator.getCost() <= lifetimeLineCount)
+            if (!generator.isVisible() && generator.getNextPrice() <= lifetimeLineCount)
                 generator.setVisible(true);
         }
         for (Upgrade upgrade : upgradeList) {

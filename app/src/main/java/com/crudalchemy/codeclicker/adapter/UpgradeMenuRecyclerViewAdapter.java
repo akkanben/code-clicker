@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.crudalchemy.codeclicker.R;
 import com.crudalchemy.codeclicker.activity.Game;
-import com.crudalchemy.codeclicker.models.Generator;
 import com.crudalchemy.codeclicker.models.Upgrade;
 
 import java.util.ArrayList;
@@ -43,7 +42,7 @@ public class UpgradeMenuRecyclerViewAdapter extends RecyclerView.Adapter<Upgrade
    {
        List<Upgrade> upgradeArrayList = new ArrayList<>();
        for (Upgrade upgrade : game.getUpgradeList()) {
-           if (upgrade.isVisible())
+           if (upgrade.isVisible() && !upgrade.isPurchased())
                upgradeArrayList.add(upgrade);
        }
        Upgrade currentUpgrade = upgradeArrayList.get(position);
@@ -70,7 +69,7 @@ public class UpgradeMenuRecyclerViewAdapter extends RecyclerView.Adapter<Upgrade
                purchaseButton.setEnabled(true);
                purchaseButton.setOnClickListener(view -> {
                    game.buyUpgrade(currentUpgrade);
-                   UpgradeMenuRecyclerViewAdapter.this.notifyItemChanged(position);
+                   UpgradeMenuRecyclerViewAdapter.this.notifyDataSetChanged();
                });
            }
        }

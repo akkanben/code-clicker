@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     GeneratorMenuRecyclerViewAdapter generatorAdapter;
     UpgradeMenuRecyclerViewAdapter upgradeAdapter;
 
-    String helloWorldCodeStr = "class Greeting{ \n   public static void main(String args[]){";
+//    String helloWorldCodeStr = "class Greeting{ \n   public static void main(String args[]){";
 
     ArrayList<String> codeTextStringList = new ArrayList<>();
     String currentCodeTextStr;

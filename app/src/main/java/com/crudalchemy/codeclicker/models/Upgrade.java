@@ -11,6 +11,8 @@ public class Upgrade
     UpgradeType type;
     boolean isVisible;
 
+    boolean purchased;
+
     public Upgrade(String name, int image, String description, int cost, UpgradeType type)
     {
         this.name = name;
@@ -80,5 +82,13 @@ public class Upgrade
 
     public void setVisible(boolean visible) {
         isVisible = visible;
+    }
+
+    public boolean isPurchased() {
+        return purchased;
+    }
+
+    public void setPurchased(boolean purchased) {
+        this.purchased = purchased;
     }
 }
