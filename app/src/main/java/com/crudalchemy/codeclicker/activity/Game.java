@@ -39,9 +39,8 @@ public class Game {
 
     public void buyGenerator(Generator generator) {
         currentLineCount -= generator.getNextPrice();
-        //linePerSecond += generator.getCurrentProductivity();
-        linePerSecond += generator.rateIncreaseTest();
-        generator.add();
+        linePerSecond += generator.getRateIncrease();
+        generator.increment();
     }
 
     public void buyUpgrade(Upgrade upgrade) {

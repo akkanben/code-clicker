@@ -38,23 +38,21 @@ public class Generator
 
     public double getNextProductivity()
     {
-        return productivityBase * count * multiplier;
+        return productivityBase * (count + 1) * multiplier;
     }
 
-    public double rateIncreaseTest(){
-        return (productivityBase * (count + 1) * multiplier) - (productivityBase * count * multiplier);
+    public double getRateIncrease(){
+        //return (productivityBase * (count + 1) * multiplier) - (productivityBase * count * multiplier);
+        if (count < 1)
+            return getNextProductivity();
+        return getNextProductivity() - currentProductivity;
     }
 
-    public void add()
+    public void increment()
     {
+        currentProductivity = getNextProductivity();
         count++;
-        if (count < 1){
-            currentProductivity = productivityBase;
-        } else {
-            currentProductivity = getNextProductivity();
-        }
     }
-
 
     public String getName() {
         return name;
