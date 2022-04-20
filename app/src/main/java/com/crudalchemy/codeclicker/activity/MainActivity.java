@@ -119,11 +119,11 @@ public class MainActivity extends AppCompatActivity {
                                 game.lifetimeLineCount += game.linePerSecond;
                                 game.currentLineCount += game.linePerSecond;
                                 game.checkForVisibilityToggle();
-                                if (generatorMenuRecyclerViewAdapter != null) {
-                                    generatorMenuRecyclerViewAdapter.notifyDataSetChanged();
+                                if (generatorAdapter != null) {
+                                    generatorAdapter.notifyDataSetChanged();
                                 }
-                                if (upgradeMenuRecyclerViewAdapter != null) {
-                                    upgradeMenuRecyclerViewAdapter.notifyDataSetChanged();
+                                if (upgradeAdapter != null) {
+                                    upgradeAdapter.notifyDataSetChanged();
                                 }
                             }
                             double temp = game.currentLineCount + (game.linePerSecond * game.partsOfASecond);

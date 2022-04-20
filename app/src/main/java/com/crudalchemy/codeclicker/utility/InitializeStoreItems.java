@@ -43,13 +43,16 @@ public class InitializeStoreItems {
         Upgrade newKeyCaps = new Upgrade("New Keycaps", R.drawable.keycaps, "Keycaps Description", 1, CLICK_EFFICIENCY);
         Upgrade newKeyCaps2 = new Upgrade("Newer Keycaps", R.drawable.keycaps, "Keycaps Description", 2, CLICK_EFFICIENCY);
         Upgrade higherRes = new Upgrade("60hz Refresh Rate", R.drawable.monitor_refresh_60, "Can you really tell anything faster?", 50, GENERATOR_EFFICIENCY);
+        Upgrade evenHigherRes = new Upgrade("120hz Refresh Rate", R.drawable.monitor_refresh_120, "How did I live before?", 50, GENERATOR_EFFICIENCY);
         Upgrade moreBricks = new Upgrade("More Bricks", R.drawable.internet_www, "More Bricks Description", 50, GENERATOR_EFFICIENCY);
         Upgrade javascript = new Upgrade("SQL Schemas", R.drawable.file_type_sql, "JavaScript Description", 75, GLOBAL_LINE_PRODUCTION_MULTIPLIER);
         higherRes.setGenerator(game.getGeneratorList().get(0));
+        evenHigherRes.setGenerator(game.getGeneratorList().get(0));
         moreBricks.setGenerator(game.getGeneratorList().get(1));
         game.getUpgradeList().add(newKeyCaps);
         game.getUpgradeList().add(newKeyCaps2);
         game.getUpgradeList().add(higherRes);
+        game.getUpgradeList().add(evenHigherRes);
         game.getUpgradeList().add(moreBricks);
         game.getUpgradeList().add(javascript);
     }

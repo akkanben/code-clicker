@@ -47,6 +47,9 @@ public class Game {
         switch (upgrade.getType()) {
             case GENERATOR_EFFICIENCY:
                 upgrade.increaseMultiplier();
+                double activeProductivity = upgrade.getGenerator().getCurrentProductivity();
+                linePerSecond += upgrade.getGenerator().getCurrentProductivity();
+                upgrade.getGenerator().setCurrentProductivity(activeProductivity * 2);
                 break;
             case GLOBAL_LINE_PRODUCTION_MULTIPLIER:
                 linePerSecond *= 1.01;

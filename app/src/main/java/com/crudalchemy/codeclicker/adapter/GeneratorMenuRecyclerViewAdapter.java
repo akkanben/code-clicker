@@ -69,6 +69,7 @@ public class GeneratorMenuRecyclerViewAdapter extends RecyclerView.Adapter<Gener
                purchaseButton.setEnabled(true);
                purchaseButton.setOnClickListener(view -> {
                    game.buyGenerator(currentGenerator);
+                   purchaseButton.setEnabled(false);
                    GeneratorMenuRecyclerViewAdapter.this.notifyItemChanged(position);
                });
            }
