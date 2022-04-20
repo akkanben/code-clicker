@@ -2,8 +2,14 @@ package com.crudalchemy.codeclicker.models;
 
 import android.graphics.drawable.Drawable;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Generator
 {
+    @PrimaryKey(autoGenerate = true)
+    public Long id;
     String name;
     int image;
     String description;
