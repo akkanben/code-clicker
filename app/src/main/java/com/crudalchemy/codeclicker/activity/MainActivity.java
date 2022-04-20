@@ -22,6 +22,8 @@ import com.crudalchemy.codeclicker.utility.LargeNumbers;
 
 import java.io.FileNotFoundException;
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,10 +36,30 @@ public class MainActivity extends AppCompatActivity {
     GeneratorMenuRecyclerViewAdapter generatorMenuRecyclerViewAdapter;
     UpgradeMenuRecyclerViewAdapter upgradeMenuRecyclerViewAdapter;
 
+    ArrayList<String> codeTextStringList = new ArrayList<>();
+    String currentCodeTextStr;
+    String helloWorldCodeStr = "class Greeting{ \n\tpublic static void main(String args[]){\n\t\tSystem.out.println(\"Hello World!\");\n\t}\n}";
+    String recursiveRemoveCodeStr = "rm -rf *";
+    String infiniteOkayCodeStr = "while(true){\n\tSystem.out.println(\"EVERYTHING IS FINE\");\n}";
+    int codeTextStrIndex = 0;
+    int codeTextStringListIndex = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_main);
+
+        codeTextStringList.add(helloWorldCodeStr);
+        codeTextStringList.add(recursiveRemoveCodeStr);
+        codeTextStringList.add(infiniteOkayCodeStr);
+        /*codeTextStringList.add();
+        codeTextStringList.add();
+        codeTextStringList.add();
+        codeTextStringList.add();
+        codeTextStringList.add();*/
+
+        currentCodeTextStr = codeTextStringList.get(0);
+
         getSupportActionBar().hide();
         tickerTextView = findViewById(R.id.text_view_main_activity_counter);
         linesPerSecondTextView = findViewById(R.id.text_view_main_activity_lines_per_second);
@@ -120,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
                 playRandomKeyboardPressSound();
                 game.lifetimeLineCount += game.linesPerClick;
                 game.currentLineCount += game.linesPerClick;
+                animateKeyPress();
             });
         });
     }
@@ -178,6 +201,26 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void animateKeyPress(){
+
+        if(codeTextStrIndex >= currentCodeTextStr.length()){
+            codeTextStrIndex = 0;
+            if(codeTextStringListIndex >= codeTextStringList.size() - 1){
+                currentCodeTextStr = codeTextStringList.get(0);
+            } else {
+                currentCodeTextStr = codeTextStringList.get(codeTextStringListIndex + 1);
+                codeTextStringListIndex++;
+            }
+
+        }
+        String cursor = "█";
+        String codeStrSubstr = currentCodeTextStr.substring(0, codeTextStrIndex) + cursor;
+        TextView typedCodeTextView = (TextView) findViewById(R.id.main_typed_text_text_view);
+        typedCodeTextView.setText(codeStrSubstr);
+
+        codeTextStrIndex++;
+    }
+  
     public void setupUpgradeItemRecyclerView()
     {
         //UPGRADES
