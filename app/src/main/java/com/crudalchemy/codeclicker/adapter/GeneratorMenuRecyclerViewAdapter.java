@@ -56,48 +56,40 @@ public class GeneratorMenuRecyclerViewAdapter extends RecyclerView.Adapter<Gener
    @Override
    public void onBindViewHolder(@NonNull GeneratorListViewHolder holder, int position)
    {
-       Generator currentGenerator = game.getGeneratorList().get(position);
-       if (currentGenerator.isVisible()) {
-           TextView itemFragmentTitleTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_title_text_view);
-           TextView itemFragmentDescriptionTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_description_text_view);
-           TextView itemFragmentCostTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_cost_text_view);
-           ImageView itemFragmentImageView = (ImageView) holder.itemView.findViewById(R.id.fragment_upgrade_image_view);
+       Generator currentGenerator = game.getActiveGeneratorList().get(position);
+       TextView itemFragmentTitleTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_title_text_view);
+       TextView itemFragmentDescriptionTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_description_text_view);
+       TextView itemFragmentCostTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_cost_text_view);
+       ImageView itemFragmentImageView = (ImageView) holder.itemView.findViewById(R.id.fragment_upgrade_image_view);
 
-           String generatorItemTitle = currentGenerator.getName();
-           String generatorItemDescription = currentGenerator.getDescription();
-           String generatorItemCost = String.valueOf(currentGenerator.getNextPrice());
-           int generatorItemImage = currentGenerator.getImage();
+       String generatorItemTitle = currentGenerator.getName();
+       String generatorItemDescription = currentGenerator.getDescription();
+       String generatorItemCost = String.valueOf(currentGenerator.getNextPrice());
+       int generatorItemImage = currentGenerator.getImage();
 
-           itemFragmentTitleTextView.setText(generatorItemTitle);
-           itemFragmentDescriptionTextView.setText(generatorItemDescription);
-           itemFragmentCostTextView.setText((generatorItemCost));
-           itemFragmentImageView.setBackgroundResource(generatorItemImage);
+       itemFragmentTitleTextView.setText(generatorItemTitle);
+       itemFragmentDescriptionTextView.setText(generatorItemDescription);
+       itemFragmentCostTextView.setText((generatorItemCost));
+       itemFragmentImageView.setBackgroundResource(generatorItemImage);
 
-           Button purchaseButton = holder.itemView.findViewById(R.id.fragment_upgrade_purchase_button);
-           if (currentGenerator.getNextPrice() > game.getCurrentLineCount()) {
+       Button purchaseButton = holder.itemView.findViewById(R.id.fragment_upgrade_purchase_button);
+       if (currentGenerator.getNextPrice() > game.getCurrentLineCount()) {
+           purchaseButton.setEnabled(false);
+       } else {
+           purchaseButton.setEnabled(true);
+           purchaseButton.setOnClickListener(view -> {
+               game.buyGenerator(currentGenerator);
+               soundPool.play(buySound,1,1,1,0,1);
                purchaseButton.setEnabled(false);
-           } else {
-               purchaseButton.setEnabled(true);
-               purchaseButton.setOnClickListener(view -> {
-                   game.buyGenerator(currentGenerator);
-                   soundPool.play(buySound,1,1,1,0,1);
-                   purchaseButton.setEnabled(false);
-                   GeneratorMenuRecyclerViewAdapter.this.notifyItemChanged(position);
-               });
-           }
+               GeneratorMenuRecyclerViewAdapter.this.notifyItemChanged(position);
+           });
        }
-
    }
 
    @Override
    public int getItemCount()
    {
-       int count = 0;
-       for (Generator element : game.getGeneratorList()) {
-          if (element.isVisible())
-              count++;
-       }
-       return count;
+       return game.getActiveGeneratorList().size();
    }
 
     public static class GeneratorListViewHolder extends RecyclerView.ViewHolder
