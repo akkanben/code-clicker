@@ -40,12 +40,7 @@ public class GeneratorMenuRecyclerViewAdapter extends RecyclerView.Adapter<Gener
    @Override
    public void onBindViewHolder(@NonNull GeneratorListViewHolder holder, int position)
    {
-       List<Generator> generatorList = new ArrayList<>();
-       for (Generator generator : game.getGeneratorList()) {
-           if (generator.isVisible())
-               generatorList.add(generator);
-       }
-       Generator currentGenerator = generatorList.get(position);
+       Generator currentGenerator = game.getGeneratorList().get(position);
        if (currentGenerator.isVisible()) {
            TextView itemFragmentTitleTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_title_text_view);
            TextView itemFragmentDescriptionTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_description_text_view);
