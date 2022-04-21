@@ -1,32 +1,41 @@
 package com.crudalchemy.codeclicker.activity;
 
+import static com.crudalchemy.codeclicker.models.UpgradeType.GENERATOR_EFFICIENCY;
 import static com.crudalchemy.codeclicker.utility.InitializeStoreItems.hardCodedStoreItems;
-import static com.crudalchemy.codeclicker.utility.SaveIO.readFromFile;
-import static com.crudalchemy.codeclicker.utility.SaveIO.writeToFile;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.crudalchemy.codeclicker.R;
 import com.crudalchemy.codeclicker.adapter.GeneratorMenuRecyclerViewAdapter;
 import com.crudalchemy.codeclicker.adapter.UpgradeMenuRecyclerViewAdapter;
+import com.crudalchemy.codeclicker.models.Generator;
+import com.crudalchemy.codeclicker.models.Upgrade;
+import com.crudalchemy.codeclicker.room.CodeClickerDatabase;
 import com.crudalchemy.codeclicker.utility.LargeNumbers;
 import com.crudalchemy.codeclicker.utility.TypingAnimation;
+import com.google.android.material.snackbar.Snackbar;
 
-import java.io.FileNotFoundException;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,20 +43,20 @@ public class MainActivity extends AppCompatActivity {
     GameLoop gameLoop;
     TextView tickerTextView;
     TextView linesPerSecondTextView;
+    TextView snackbar;
     SoundPool soundPool;
-    int[] keyPressesArray;
-    GeneratorMenuRecyclerViewAdapter generatorMenuRecyclerViewAdapter;
-    UpgradeMenuRecyclerViewAdapter upgradeMenuRecyclerViewAdapter;
-
+  
+    int[] soundEffectsArray;
+    CodeClickerDatabase codeClickerDatabase;
     GeneratorMenuRecyclerViewAdapter generatorAdapter;
     UpgradeMenuRecyclerViewAdapter upgradeAdapter;
-
-    // Strings for typing animation
+  
     ArrayList<String> codeTextStringList = new ArrayList<>();
     String currentCodeTextStr;
     int codeTextStrIndex = 0;
     int codeTextStringListIndex = 0;
 
+    Animation scaleUpKeyboard, scaleDownKeyboard, scaleUpGeneratorButton, scaleDownGeneratorButton, scaleUpUpgradeButton, scaleDownUpgradeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,35 +65,40 @@ public class MainActivity extends AppCompatActivity {
 
         codeTextStringList = TypingAnimation.setupTypingAnimStrings();
         currentCodeTextStr = codeTextStringList.get(0);
+        
+        setupButtonAnimations();
+        snackbar = findViewById(R.id.main_activity_text_view_snackbar);
+        snackbar.setText("Game Saved")
 
         getSupportActionBar().hide();
         tickerTextView = findViewById(R.id.text_view_main_activity_counter);
         linesPerSecondTextView = findViewById(R.id.text_view_main_activity_lines_per_second);
         setupClick();
-        setupKeyboardSounds();
+        setupSounds();
+
+        // setting up room database
+        codeClickerDatabase = Room.databaseBuilder(
+                getApplicationContext(),
+                CodeClickerDatabase.class,
+                "codeClicker")
+                .allowMainThreadQueries() // TODO: remove this at some point.
+                .fallbackToDestructiveMigration()
+                .build();
+
         game = new Game();
         hardCodedStoreItems(game);
-       /* writeToFile(game, this);
-        try {
-            game = readFromFile(this);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-       }*/
         setUpSaveLoad();
-//        setupGeneratorButton();
-        setupUpgradeItemRecyclerView();
         gameLoop = new GameLoop("game");
         gameLoop.start();
 
         setupPopupGeneratorButton();
         setupPopupUpgradesButton();
-
     }
 
     class GameLoop implements Runnable {
         private Thread thread;
-        private String threadName;
-        private volatile boolean running;
+        private final String threadName;
+        private final boolean running;
 
         public GameLoop(String threadName) {
             this.threadName = threadName;
@@ -96,25 +110,28 @@ public class MainActivity extends AppCompatActivity {
             try {
                 while (running) {
                     runOnUiThread(new Runnable() {
+
                         @Override
                         public void run() {
                             if (game.partsOfASecond < 0.01) {
                                 game.lifetimeLineCount += game.linePerSecond;
                                 game.currentLineCount += game.linePerSecond;
-                                game.checkForVisibilityToggle();
-                                if (generatorMenuRecyclerViewAdapter != null) {
-                                    generatorMenuRecyclerViewAdapter.notifyDataSetChanged();
-                                }
-                                if (upgradeMenuRecyclerViewAdapter != null) {
-                                    upgradeMenuRecyclerViewAdapter.notifyDataSetChanged();
-                                }
+                                game.saveTimer++;
                             }
+                            if (game.getSaveTimer() > 10) {
+                                saveGame();
+                                snackbar.setVisibility(View.VISIBLE);
+                                game.setSaveTimer(0);
+                            }
+                            if (game.getSaveTimer() == 1)
+                                snackbar.setVisibility(View.INVISIBLE);
+
+                            game.updateItemLists(generatorAdapter, upgradeAdapter);
                             double temp = game.currentLineCount + (game.linePerSecond * game.partsOfASecond);
                             tickerTextView.setText(LargeNumbers.convert(temp));
-                            linesPerSecondTextView.setText(Double.toString(game.linePerSecond) + " lines/second");
+                            linesPerSecondTextView.setText(LargeNumbers.convertWithDecimals(game.linePerSecond) + "/second ");
                         }
                     });
-
 
                     Thread.sleep(100);
                     game.partsOfASecond += 0.10;
@@ -122,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                         game.partsOfASecond = 0.00001;
                 }
             } catch (InterruptedException e) {
-                System.out.println(e.toString());
+                System.out.println(e);
             }
         }
 
@@ -135,8 +152,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupClick() {
-        Button button = findViewById(R.id.button_main_activity_click);
-        button.setOnClickListener(view -> {
+        ImageView keyboardButton = findViewById(R.id.button_main_activity_click);
+        keyboardButton.setOnClickListener(view -> {
             runOnUiThread(() -> {
                 playRandomKeyboardPressSound();
                 game.lifetimeLineCount += game.linesPerClick;
@@ -146,57 +163,70 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private void setupButtonAnimations()
+    {
+        ImageView keyboardButton = findViewById(R.id.button_main_activity_click);
+        scaleUpKeyboard = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        scaleDownKeyboard = AnimationUtils.loadAnimation(this, R.anim.scale_down);
 
-//    private void setupGeneratorButton()
-//    {
-//        Button generatorButton = findViewById(R.id.button_main_activity_generators);
-//        Button upgradeButton = findViewById(R.id.button_main_activity_upgrades);
-//        Button enterButton = findViewById(R.id.button_main_activity_click);
-//        RecyclerView upgradeItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view_upgrades);
-//        RecyclerView generatorItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view_generators);
-//
-//        generatorButton.setOnClickListener(view ->
-//        {
-//            if (generatorItemListRecyclerView.getVisibility() == View.VISIBLE) {
-//                enterButton.setVisibility(View.VISIBLE);
-//                generatorItemListRecyclerView.setVisibility(View.INVISIBLE);
-//                upgradeItemListRecyclerView.setVisibility(View.INVISIBLE);
-//            }
-//            else {
-//                enterButton.setVisibility(View.INVISIBLE);
-//                generatorItemListRecyclerView.setVisibility(View.VISIBLE);
-//                upgradeItemListRecyclerView.setVisibility(View.INVISIBLE);
-//            }
-//        });
-//
-//        upgradeButton.setOnClickListener(view -> {
-//            if (upgradeItemListRecyclerView.getVisibility() == View.VISIBLE) {
-//                enterButton.setVisibility(View.VISIBLE);
-//                upgradeItemListRecyclerView.setVisibility(View.INVISIBLE);
-//                generatorItemListRecyclerView.setVisibility(View.INVISIBLE);
-//            }
-//            else {
-//                enterButton.setVisibility(View.INVISIBLE);
-//                upgradeItemListRecyclerView.setVisibility(View.VISIBLE);
-//                generatorItemListRecyclerView.setVisibility(View.INVISIBLE);
-//            }
-//        });
-//
-//    }
+        keyboardButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    keyboardButton.startAnimation(scaleUpKeyboard);
+                    setupClick();
+                    runOnUiThread(() -> {
+                        playRandomKeyboardPressSound();
+                        game.lifetimeLineCount += game.linesPerClick;
+                        game.currentLineCount += game.linesPerClick;
+                        animateKeyPress();
+                    });
+                }
+                else if(motionEvent.getAction() == MotionEvent.ACTION_UP)
+                {
+                    keyboardButton.startAnimation(scaleDownKeyboard);
+                }
+                return true;
+            }
+        });
+    }
 
+    private void saveGame() {
+        codeClickerDatabase.dao().clearGame();
+        codeClickerDatabase.dao().clearGenerator();
+        codeClickerDatabase.dao().clearUpgrade();
+        codeClickerDatabase.dao().insertGame(game);
+        for (Generator generator : game.getGeneratorList()) {
+            codeClickerDatabase.dao().insertGenerator(generator);
+        }
+        for (Upgrade upgrade : game.getUpgradeList()) {
+            codeClickerDatabase.dao().insertUpgrade(upgrade);
+        }
+    }
 
-    private void setUpSaveLoad() {
+        private void setUpSaveLoad() {
         Button saveButton = findViewById(R.id.save);
         Button loadButton = findViewById(R.id.load);
         saveButton.setOnClickListener(view -> {
-            writeToFile(game, MainActivity.this);
+            saveGame();
         });
         loadButton.setOnClickListener(view -> {
-            try {
-                game = readFromFile(MainActivity.this);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            List<Generator> generatorList = codeClickerDatabase.dao().findAllGenerators();
+            List<Upgrade> upgradeList = codeClickerDatabase.dao().findAllUpgrades();
+            for(Upgrade upgrade : upgradeList)
+            {
+                if(upgrade.getType().equals(GENERATOR_EFFICIENCY))
+                {
+                    String generatorName = upgrade.getGeneratorName();
+                    List<Generator> generators = generatorList.stream().filter(element -> element.getName().equals(generatorName)).collect(Collectors.toList());
+                    upgrade.setGenerator(generators.get(0));
+                }
             }
+            game = codeClickerDatabase.dao().find();
+            game.setGeneratorList(generatorList);
+            game.setUpgradeList(upgradeList);
         });
     }
 
@@ -211,81 +241,104 @@ public class MainActivity extends AppCompatActivity {
                 currentCodeTextStr = codeTextStringList.get(codeTextStringListIndex + 1);
                 codeTextStringListIndex++;
             }
-
         }
         String cursor = "█";
         String codeStrSubstr = currentCodeTextStr.substring(0, codeTextStrIndex) + cursor;
-        TextView typedCodeTextView = (TextView) findViewById(R.id.main_typed_text_text_view);
+        TextView typedCodeTextView = findViewById(R.id.main_typed_text_text_view);
         typedCodeTextView.setText(codeStrSubstr);
-
         codeTextStrIndex++;
     }
 
-    public void setupUpgradeItemRecyclerView() {
-        //UPGRADES
-        RecyclerView upgradeItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view_upgrades);
-        RecyclerView.LayoutManager upgradeLayoutManager = new LinearLayoutManager(this);
-        upgradeItemListRecyclerView.setLayoutManager(upgradeLayoutManager);
-        upgradeMenuRecyclerViewAdapter = new UpgradeMenuRecyclerViewAdapter(game, this);
-        upgradeItemListRecyclerView.setAdapter(upgradeMenuRecyclerViewAdapter);
-
-        //GENERATORS
-        RecyclerView generatorItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view_generators);
-        RecyclerView.LayoutManager generatorLayoutManager = new LinearLayoutManager(this);
-        generatorItemListRecyclerView.setLayoutManager(generatorLayoutManager);
-        generatorMenuRecyclerViewAdapter = new GeneratorMenuRecyclerViewAdapter(game, this);
-        generatorItemListRecyclerView.setAdapter(generatorMenuRecyclerViewAdapter);
-
-    }
-
-    public void setupPopupGeneratorButton() {
-        Button button = (Button) findViewById(R.id.button_main_activity_generators);
-        button.setOnClickListener(b ->
-        {
-            showPopupGeneratorDialogBox();
+    @SuppressLint("ClickableViewAccessibility")
+    public void setupPopupGeneratorButton()
+    {
+        Button button = findViewById(R.id.button_main_activity_generators);
+        scaleUpGeneratorButton = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        scaleDownGeneratorButton = AnimationUtils.loadAnimation(this, R.anim.scale_down);
+        button.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    button.startAnimation(scaleUpGeneratorButton);
+                }
+                else if(motionEvent.getAction() == MotionEvent.ACTION_UP)
+                {
+                    showPopupGeneratorDialogBox();
+                    button.startAnimation(scaleDownGeneratorButton);
+                }
+                return true;
+            }
         });
     }
 
-    public void setupPopupUpgradesButton() {
-        Button button = (Button) findViewById(R.id.button_main_activity_upgrades);
-        button.setOnClickListener(b ->
-        {
-            showPopupUpgradesDialogBox();
+    @SuppressLint("ClickableViewAccessibility")
+    public void setupPopupUpgradesButton()
+    {
+        Button button = findViewById(R.id.button_main_activity_upgrades);
+        scaleUpUpgradeButton = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        scaleDownUpgradeButton = AnimationUtils.loadAnimation(this, R.anim.scale_down);
+        button.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    button.startAnimation(scaleUpUpgradeButton);
+                }
+                else if(motionEvent.getAction() == MotionEvent.ACTION_UP)
+                {
+                    showPopupUpgradesDialogBox();
+                    button.startAnimation(scaleDownUpgradeButton);
+                }
+                return true;
+            }
         });
     }
 
-    public void showPopupGeneratorDialogBox() {
-
+    public void showPopupGeneratorDialogBox()
+    {
+        int bgStreamId = soundPool.play(soundEffectsArray[5],0.50f,0.50f,1,-1,1);
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.popup_generator);
-        RecyclerView rv = (RecyclerView) dialog.findViewById(R.id.popup_generator_recycler_view);
+        RecyclerView rv = dialog.findViewById(R.id.popup_generator_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv.setLayoutManager(layoutManager);
         generatorAdapter = new GeneratorMenuRecyclerViewAdapter(game, this);
         rv.setAdapter(generatorAdapter);
+        dialog.setOnDismissListener(d -> {
+            soundPool.setVolume(bgStreamId, 0,0);
+        });
         dialog.show();
     }
 
-    public void showPopupUpgradesDialogBox() {
 
+    public void showPopupUpgradesDialogBox()
+    {
+        int bgStreamId = soundPool.play(soundEffectsArray[5],0.50f,0.50f,1,-1,1);
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.popup_upgrades);
-        RecyclerView rv = (RecyclerView) dialog.findViewById(R.id.popup_upgrades_recycler_view);
+        RecyclerView rv = dialog.findViewById(R.id.popup_upgrades_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv.setLayoutManager(layoutManager);
         upgradeAdapter = new UpgradeMenuRecyclerViewAdapter(game, this);
         rv.setAdapter(upgradeAdapter);
+
+        dialog.setOnDismissListener(d -> {
+            soundPool.setVolume(bgStreamId, 0,0);
+        });
         dialog.show();
     }
 
-    public void playRandomKeyboardPressSound() {
+    public void playRandomKeyboardPressSound()
+    {
         Random rand = new Random();
-        soundPool.play(keyPressesArray[rand.nextInt(5)], (float) 0.65, (float) 0.65, 1, 0, 1);
+
+        soundPool.play(soundEffectsArray[rand.nextInt(5)], (float) 0.65, (float) 0.65,1,0, 1);
     }
 
-    private void setupKeyboardSounds() {
+    private void setupSounds() {
         AudioAttributes audioAttributes = new AudioAttributes
                 .Builder()
                 .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
@@ -293,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         soundPool = new SoundPool
                 .Builder()
-                .setMaxStreams(5)
+                .setMaxStreams(6)
                 .setAudioAttributes(audioAttributes)
                 .build();
         int keyA = soundPool.load(this, R.raw.new_key01, 1);
@@ -301,9 +354,9 @@ public class MainActivity extends AppCompatActivity {
         int keyC = soundPool.load(this, R.raw.new_key03, 1);
         int keyD = soundPool.load(this, R.raw.new_key04, 1);
         int keyE = soundPool.load(this, R.raw.new_key05, 1);
-        keyPressesArray = new int[]{keyA, keyB, keyC, keyD, keyE};
-        // Workaround for laggy sound
-        soundPool.play(keyPressesArray[0], 0, 0, 1, -1, 1f);
-    }
+        int bgSong = soundPool.load(this,R.raw.electronicsoul,1);
+        soundEffectsArray = new int[]{keyA, keyB, keyC, keyD, keyE, bgSong};
 
+
+    }
 }

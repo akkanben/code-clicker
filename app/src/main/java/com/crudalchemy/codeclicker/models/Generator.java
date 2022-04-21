@@ -1,47 +1,59 @@
 package com.crudalchemy.codeclicker.models;
 
-import android.graphics.drawable.Drawable;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+@Entity
 public class Generator
 {
+    @PrimaryKey(autoGenerate = true)
+    public Long id;
     String name;
     int image;
     String description;
-    int count = 1;
-    int cost;
-    double growthRate;
+    int count = 0;
+    int baseCost;
+    double priceGrowthRate;
     double productivityBase;
     int multiplier = 1;
-    double currentProductivity = productivityBase;
+    double currentProductivity;
     boolean isVisible;
+    boolean isPurchasable;
 
-    public Generator(String name, int image, String description, int cost, double growthRate,
+    public Generator(String name, int image, String description, int baseCost, double priceGrowthRate,
                      double productivityBase)
     {
         this.name = name;
         this.image = image;
         this.description = description;
-        this.cost = cost;
-        this.growthRate = growthRate;
+        this.baseCost = baseCost;
+        this.priceGrowthRate = priceGrowthRate;
         this.productivityBase = productivityBase;
+        currentProductivity = productivityBase;
     }
 
     public int getNextPrice()
     {
-        return (int) (growthRate * Math.pow(cost,count));
+        return (int) (baseCost * Math.pow(priceGrowthRate,count + 1));
     }
 
     public double getNextProductivity()
     {
-        return productivityBase * count * multiplier;
+        return productivityBase * (count + 1) * multiplier;
     }
 
-    public void add()
+    public double getRateIncrease(){
+        //return (productivityBase * (count + 1) * multiplier) - (productivityBase * count * multiplier);
+        if (count < 1)
+            return getNextProductivity();
+        return getNextProductivity() - currentProductivity;
+    }
+
+    public void increment()
     {
-        count++;
         currentProductivity = getNextProductivity();
+        count++;
     }
-
 
     public String getName() {
         return name;
@@ -75,20 +87,20 @@ public class Generator
         this.count = count;
     }
 
-    public int getCost() {
-        return cost;
+    public int getBaseCost() {
+        return baseCost;
     }
 
-    public void setCost(int cost) {
-        this.cost = cost;
+    public void setBaseCost(int baseCost) {
+        this.baseCost = baseCost;
     }
 
-    public double getGrowthRate() {
-        return growthRate;
+    public double getPriceGrowthRate() {
+        return priceGrowthRate;
     }
 
-    public void setGrowthRate(double growthRate) {
-        this.growthRate = growthRate;
+    public void setPriceGrowthRate(double priceGrowthRate) {
+        this.priceGrowthRate = priceGrowthRate;
     }
 
     public double getProductivityBase() {
@@ -121,5 +133,13 @@ public class Generator
 
     public void setVisible(boolean visible) {
         isVisible = visible;
+    }
+
+    public boolean isPurchasable() {
+        return isPurchasable;
+    }
+
+    public void setPurchasable(boolean purchasable) {
+        isPurchasable = purchasable;
     }
 }

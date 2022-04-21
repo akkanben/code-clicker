@@ -1,15 +1,28 @@
 package com.crudalchemy.codeclicker.models;
 
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+import androidx.room.Relation;
 
+@Entity
 public class Upgrade
 {
+    @PrimaryKey(autoGenerate = true)
+    public Long id;
+    @Ignore
     Generator generator;
+    String generatorName;
     String name;
     int image;
     String description;
     int cost;
     UpgradeType type;
     boolean isVisible;
+    boolean isPurchasable;
+
+    boolean purchased;
 
     public Upgrade(String name, int image, String description, int cost, UpgradeType type)
     {
@@ -18,6 +31,17 @@ public class Upgrade
         this.cost = cost;
         this.description = description;
         this.type = type;
+    }
+
+    public Upgrade(String name, int image, String description, int cost, UpgradeType type, Generator generator)
+    {
+        this.name = name;
+        this.image = image;
+        this.cost = cost;
+        this.description = description;
+        this.type = type;
+        this.generator = generator;
+        generatorName = generator.getName();
     }
 
     public void increaseMultiplier()
@@ -80,5 +104,29 @@ public class Upgrade
 
     public void setVisible(boolean visible) {
         isVisible = visible;
+    }
+
+    public boolean isPurchased() {
+        return purchased;
+    }
+
+    public void setPurchased(boolean purchased) {
+        this.purchased = purchased;
+    }
+
+    public String getGeneratorName() {
+        return generatorName;
+    }
+
+    public void setGeneratorName(String generatorName) {
+        this.generatorName = generatorName;
+    }
+
+    public boolean isPurchasable() {
+        return isPurchasable;
+    }
+
+    public void setPurchasable(boolean purchasable) {
+        isPurchasable = purchasable;
     }
 }

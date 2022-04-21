@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_activity_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:soundEffectsEnabled="false"
@@ -11,46 +12,52 @@
         android:id="@+id/text_view_main_activity_counter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="124dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/round_corner"
+        android:fontFamily="@font/digital_desolation"
         android:text="TextView"
-        android:textSize="34sp"
+        android:textColor="@color/green"
+        android:textFontWeight="400"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_main_activity_click"
-        android:layout_width="143dp"
-        android:layout_height="66dp"
-        android:layout_marginBottom="80dp"
-        android:soundEffectsEnabled="false"
-        android:text="Enter"
-        app:layout_constraintBottom_toTopOf="@+id/text_view_main_activity_lines_per_second"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
         android:id="@+id/button_main_activity_generators"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
-        android:text="Generators"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/green"
+        android:fontFamily="@font/digital_tech"
+        android:text="Items"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_main_activity_upgrades"
-        app:layout_constraintHorizontal_bias="0.592"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/black"
+        app:strokeWidth="4dp" />
 
     <Button
         android:id="@+id/button_main_activity_upgrades"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="60dp"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/red"
+        android:fontFamily="@font/digital_tech"
         android:text="Upgrades"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:strokeColor="@color/black"
+        app:strokeWidth="4dp" />
 
     <Button
         android:id="@+id/save"
@@ -72,80 +79,78 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/upgrade_menu_list_recycler_view_generators"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layoutAnimation="@anim/layout_animation"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="#673AB7"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/button_main_activity_generators"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_main_activity_counter" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/upgrade_menu_list_recycler_view_upgrades"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layoutAnimation="@anim/layout_animation"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="#FF9800"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/button_main_activity_generators"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.488"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_main_activity_counter">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
     <TextView
         android:id="@+id/main_typed_text_text_view"
-        android:layout_width="231dp"
-        android:layout_height="137dp"
-        android:layout_marginStart="72dp"
+        android:layout_width="223dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="92dp"
         android:elevation="2dp"
-        android:text="Code Text"
-        android:textColor="#4CAF50"
+        android:text="█"
+        android:textColor="@color/white"
         android:typeface="monospace"
-        app:layout_constraintBottom_toBottomOf="@+id/main_main_computer_image_image_view"
-        app:layout_constraintEnd_toEndOf="@+id/main_main_computer_image_image_view"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/main_main_computer_image_image_view"
-        app:layout_constraintTop_toTopOf="@+id/main_main_computer_image_image_view"
-        app:layout_constraintVertical_bias="0.16" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_main_activity_counter"
+        tools:text="Code text" />
 
     <ImageView
         android:id="@+id/main_main_computer_image_image_view"
-        android:layout_width="367dp"
-        android:layout_height="362dp"
-        android:elevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="387dp"
+        android:layout_height="376dp"
+        android:layout_marginTop="52dp"
+        android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.636"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.504"
-        app:srcCompat="@drawable/computer_4" />
+        app:layout_constraintTop_toBottomOf="@+id/text_view_main_activity_counter"
+        app:srcCompat="@drawable/computer_6" />
 
     <TextView
         android:id="@+id/text_view_main_activity_lines_per_second"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="228dp"
+        android:layout_height="14dp"
+        android:layout_marginTop="238dp"
+        android:background="@color/hd_blue"
+        android:elevation="2dp"
+        android:fontFamily="monospace"
+        android:textAlignment="textEnd"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_main_activity_counter"
         tools:text="lines per second" />
+
+    <ImageView
+        android:id="@+id/button_main_activity_click"
+        android:layout_width="360dp"
+        android:layout_height="210dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="356dp"
+        android:elevation="0dp"
+        android:rotationX="50"
+        android:soundEffectsEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.186"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_main_activity_counter"
+        app:srcCompat="@drawable/keyboard_custom" />
+
+    <TextView
+        android:id="@+id/main_activity_text_view_snackbar"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="216dp"
+        android:background="@color/hd_blue"
+        android:elevation="4dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.697"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_main_activity_counter" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
