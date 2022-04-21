@@ -126,11 +126,12 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             if (game.partsOfASecond < 0.01) {
+                                game.fillActiveLists(generatorAdapter, upgradeAdapter);
                                 game.lifetimeLineCount += game.linePerSecond;
                                 game.currentLineCount += game.linePerSecond;
                                 game.saveTimer++;
                             }
-                            if (game.getSaveTimer() > 10) {
+                            if (game.getSaveTimer() > 15) {
                                 saveGame();
                                 snackbar.setVisibility(View.VISIBLE);
                                 game.setSaveTimer(0);
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                             if (game.getSaveTimer() == 1)
                                 snackbar.setVisibility(View.INVISIBLE);
 
-                            game.updateItemLists(generatorAdapter, upgradeAdapter);
+                            game.updatePurchasableInActiveLists(generatorAdapter, upgradeAdapter);
                             double temp = game.currentLineCount + (game.linePerSecond * game.partsOfASecond);
                             tickerTextView.setText(LargeNumbers.convert(temp));
                             linesPerSecondTextView.setText(LargeNumbers.convertWithDecimals(game.linePerSecond) + "/second ");
@@ -318,6 +319,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager generatorLayoutManager = new LinearLayoutManager(this);
         generatorDialog.setCancelable(true);
         generatorDialogRecyclerView.setLayoutManager(generatorLayoutManager);
+        generatorAdapter = new GeneratorMenuRecyclerViewAdapter(game, this);
         generatorDialogRecyclerView.setAdapter(generatorAdapter);
 
         RecyclerView.LayoutManager upgradeLayoutManager = new LinearLayoutManager(this);

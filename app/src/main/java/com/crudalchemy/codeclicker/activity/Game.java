@@ -27,6 +27,10 @@ public class Game {
     List<Generator> generatorList;
     @Ignore
     List<Upgrade> upgradeList;
+    @Ignore
+    List<Generator> activeGeneratorList;
+    @Ignore
+    List<Upgrade> activeUpgradeList;
 
     //int parcelData;
 
@@ -39,6 +43,8 @@ public class Game {
         saveTimer = 0;
         generatorList = new ArrayList<>();
         upgradeList = new ArrayList<>();
+        activeGeneratorList = new ArrayList<>();
+        activeUpgradeList = new ArrayList<>();
     }
 
     public void buyGenerator(Generator generator) {
@@ -67,43 +73,52 @@ public class Game {
         currentLineCount -= upgrade.getCost();
     }
 
-    public void updateItemLists(GeneratorMenuRecyclerViewAdapter generatorAdapter, UpgradeMenuRecyclerViewAdapter upgradeAdapter) {
+    public void fillActiveLists(GeneratorMenuRecyclerViewAdapter generatorAdapter, UpgradeMenuRecyclerViewAdapter upgradeAdapter) {
+        activeGeneratorList.clear();
         for (Generator generator : generatorList) {
             if (generator.getNextPrice() <= lifetimeLineCount) {
-                if (!generator.isVisible()) {
-                    generator.setVisible(true);
-                    if (generatorAdapter != null)
-                        generatorAdapter.notifyItemChanged(generatorList.indexOf(generator));
+                activeGeneratorList.add(generator);
+                if (generatorAdapter != null) {
+                    //generatorAdapter.notifyItemInserted(activeGeneratorList.indexOf(generator));
+                    upgradeAdapter.notifyDataSetChanged();
                 }
             }
-            if (!generator.isPurchasable() && generator.getNextPrice() <= currentLineCount) {
-                generator.setPurchasable(true);
-                if (generatorAdapter != null)
-                    generatorAdapter.notifyItemChanged(generatorList.indexOf(generator));
-            } else if (generator.isPurchasable() && generator.getNextPrice() > currentLineCount) {
-                generator.setPurchasable(false);
-                if (generatorAdapter != null)
-                    generatorAdapter.notifyItemChanged(generatorList.indexOf(generator));
-            }
         }
+        activeUpgradeList.clear();
         for (Upgrade upgrade : upgradeList) {
             if (upgrade.getCost() <= lifetimeLineCount) {
-                if (!upgrade.isVisible()) {
-                    upgrade.setVisible(true);
-                    if (upgradeAdapter != null)
-                        upgradeAdapter.notifyItemChanged(upgradeList.indexOf(upgrade));
+                activeUpgradeList.add(upgrade);
+                if (upgradeAdapter != null) {
+                    //upgradeAdapter.notifyItemInserted(activeUpgradeList.indexOf(upgrade));
+                    upgradeAdapter.notifyDataSetChanged();
                 }
             }
-            if (!upgrade.isPurchasable() && upgrade.getCost() <= currentLineCount) {
-                upgrade.setPurchasable(true);
-                if (upgradeAdapter != null)
-                    upgradeAdapter.notifyItemChanged(upgradeList.indexOf(upgrade));
-            } else if (upgrade.isPurchasable() && upgrade.getCost() > currentLineCount) {
-                upgrade.setPurchasable(false);
-                if (upgradeAdapter != null)
-                    upgradeAdapter.notifyItemChanged((upgradeList.indexOf(upgrade)));
-            }
         }
+    }
+
+    public void updatePurchasableInActiveLists(GeneratorMenuRecyclerViewAdapter generatorAdapter, UpgradeMenuRecyclerViewAdapter upgradeAdapter) {
+       for (Generator generator : activeGeneratorList) {
+           if (!generator.isPurchasable() && generator.getNextPrice() <= currentLineCount) {
+               generator.setPurchasable(true);
+               if (generatorAdapter != null)
+                   generatorAdapter.notifyItemChanged(activeGeneratorList.indexOf(generator));
+           } else if (generator.isPurchasable() && generator.getNextPrice() > currentLineCount) {
+               generator.setPurchasable(false);
+               if (generatorAdapter != null)
+                   generatorAdapter.notifyItemChanged(activeGeneratorList.indexOf(generator));
+           }
+       }
+       for (Upgrade upgrade : activeUpgradeList) {
+           if (!upgrade.isPurchasable() && upgrade.getCost() <= currentLineCount) {
+               upgrade.setPurchasable(true);
+               if (upgradeAdapter != null)
+                   upgradeAdapter.notifyItemChanged(activeUpgradeList.indexOf(upgrade));
+           } else if (upgrade.isPurchasable() && upgrade.getCost() > currentLineCount) {
+               upgrade.setPurchasable(false);
+               if (upgradeAdapter != null)
+                   upgradeAdapter.notifyItemChanged((activeUpgradeList.indexOf(upgrade)));
+           }
+       }
     }
 
 
@@ -169,5 +184,21 @@ public class Game {
 
     public void setSaveTimer(int saveTimer) {
         this.saveTimer = saveTimer;
+    }
+
+    public List<Generator> getActiveGeneratorList() {
+        return activeGeneratorList;
+    }
+
+    public void setActiveGeneratorList(List<Generator> activeGeneratorList) {
+        this.activeGeneratorList = activeGeneratorList;
+    }
+
+    public List<Upgrade> getActiveUpgradeList() {
+        return activeUpgradeList;
+    }
+
+    public void setActiveUpgradeList(List<Upgrade> activeUpgradeList) {
+        this.activeUpgradeList = activeUpgradeList;
     }
 }
