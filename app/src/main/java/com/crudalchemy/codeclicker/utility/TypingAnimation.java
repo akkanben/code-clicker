@@ -13,7 +13,7 @@ public class TypingAnimation {
         // String recursiveRemoveCodeStr = "public String globalThermonuclearWar(File dir){\n\tFile[] filesInDir = dir.listFiles();\n\tif(filesInDir != null){\n\t\tfor(File file : filesInDir) {\n\t\t\tdeleteDirectory(file);\n\t\t}\n\t\n\treturn \"Shall we play a game?\"" ;
         String infiniteOkayCodeStr = "while(true){\n\tSystem.out.println(\"EVERYTHING IS FINE\");\n} ";
         String brevityExceptionCodeStr = "public String javaCode(String perfectlyFineCode) throws VerbosityException {\n\treturn \"Abstract \" + perfectlyFineCode + \"FactoryFactory\"\n} ";
-        String metaCodingCodeStr = "private void typeAnim(){\n\tif(strIdx>=str.length()){\n\t\tstrIdx = 0;\n\t}String subStr = str.substring(0,strIdx);\n\tanimTextView.setText( subStr);\n\tstrIdx++;} \n";
+        String metaCodingCodeStr = "private void typeAnim(){\n\tif(strIdx>=str.length()){\n\t\tstrIdx = 0;\n\t}String subStr = str.substring(0,strIdx);\n\tanimTextView.setText( subStr);\n\tstrIdx++;} ";
         String a6 = "";
         String a7 = "";
         String a8 = "";
