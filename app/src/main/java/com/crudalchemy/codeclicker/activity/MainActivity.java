@@ -48,9 +48,12 @@ public class MainActivity extends AppCompatActivity {
   
     int[] soundEffectsArray;
     CodeClickerDatabase codeClickerDatabase;
+
     GeneratorMenuRecyclerViewAdapter generatorAdapter;
     UpgradeMenuRecyclerViewAdapter upgradeAdapter;
-  
+
+    Dialog generatorDialog;
+    Dialog upgradeDialog;
     ArrayList<String> codeTextStringList = new ArrayList<>();
     String currentCodeTextStr;
     int codeTextStrIndex = 0;
@@ -62,13 +65,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_main);
-
-        codeTextStringList = TypingAnimation.setupTypingAnimStrings();
-        currentCodeTextStr = codeTextStringList.get(0);
-        
         setupButtonAnimations();
         snackbar = findViewById(R.id.main_activity_text_view_snackbar);
         snackbar.setText("Game Saved");
+        codeTextStringList = TypingAnimation.setupTypingAnimStrings();
+        currentCodeTextStr = codeTextStringList.get(0);
 
         getSupportActionBar().hide();
         tickerTextView = findViewById(R.id.text_view_main_activity_counter);
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         game = new Game();
+        setupDialogBoxes();
         hardCodedStoreItems(game);
         setUpSaveLoad();
         gameLoop = new GameLoop("game");
@@ -114,11 +116,12 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             if (game.partsOfASecond < 0.01) {
+                                game.fillActiveLists(generatorAdapter, upgradeAdapter);
                                 game.lifetimeLineCount += game.linePerSecond;
                                 game.currentLineCount += game.linePerSecond;
                                 game.saveTimer++;
                             }
-                            if (game.getSaveTimer() > 10) {
+                            if (game.getSaveTimer() > 15) {
                                 saveGame();
                                 snackbar.setVisibility(View.VISIBLE);
                                 game.setSaveTimer(0);
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                             if (game.getSaveTimer() == 1)
                                 snackbar.setVisibility(View.INVISIBLE);
 
-                            game.updateItemLists(generatorAdapter, upgradeAdapter);
+                            game.updatePurchasableInActiveLists(generatorAdapter, upgradeAdapter);
                             double temp = game.currentLineCount + (game.linePerSecond * game.partsOfASecond);
                             tickerTextView.setText(LargeNumbers.convert(temp));
                             linesPerSecondTextView.setText(LargeNumbers.convertWithDecimals(game.linePerSecond) + "/second ");
@@ -295,40 +298,48 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void setupDialogBoxes() {
+        generatorDialog = new Dialog(MainActivity.this);
+        upgradeDialog = new Dialog(MainActivity.this);
+        generatorDialog.setContentView(R.layout.popup_generator);
+        upgradeDialog.setContentView(R.layout.popup_upgrades);
+
+        RecyclerView upgradeDialogRecyclerView = upgradeDialog.findViewById(R.id.popup_upgrades_recycler_view);
+        RecyclerView generatorDialogRecyclerView = generatorDialog.findViewById(R.id.popup_generator_recycler_view);
+
+        RecyclerView.LayoutManager generatorLayoutManager = new LinearLayoutManager(this);
+        generatorDialog.setCancelable(true);
+        generatorDialogRecyclerView.setLayoutManager(generatorLayoutManager);
+        generatorAdapter = new GeneratorMenuRecyclerViewAdapter(game, this);
+        generatorDialogRecyclerView.setAdapter(generatorAdapter);
+
+        RecyclerView.LayoutManager upgradeLayoutManager = new LinearLayoutManager(this);
+        upgradeDialog.setCancelable(true);
+        upgradeDialogRecyclerView.setLayoutManager(upgradeLayoutManager);
+        upgradeAdapter = new UpgradeMenuRecyclerViewAdapter(game, this);
+        upgradeDialogRecyclerView.setAdapter(upgradeAdapter);
+    }
+
     public void showPopupGeneratorDialogBox()
     {
         int bgStreamId = soundPool.play(soundEffectsArray[5],0.50f,0.50f,1,-1,1);
-        final Dialog dialog = new Dialog(MainActivity.this);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.popup_generator);
-        RecyclerView rv = dialog.findViewById(R.id.popup_generator_recycler_view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        rv.setLayoutManager(layoutManager);
-        generatorAdapter = new GeneratorMenuRecyclerViewAdapter(game, this);
-        rv.setAdapter(generatorAdapter);
-        dialog.setOnDismissListener(d -> {
+
+
+
+        generatorDialog.setOnDismissListener(d -> {
             soundPool.setVolume(bgStreamId, 0,0);
         });
-        dialog.show();
+        generatorDialog.show();
     }
 
 
     public void showPopupUpgradesDialogBox()
     {
         int bgStreamId = soundPool.play(soundEffectsArray[5],0.50f,0.50f,1,-1,1);
-        final Dialog dialog = new Dialog(MainActivity.this);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.popup_upgrades);
-        RecyclerView rv = dialog.findViewById(R.id.popup_upgrades_recycler_view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        rv.setLayoutManager(layoutManager);
-        upgradeAdapter = new UpgradeMenuRecyclerViewAdapter(game, this);
-        rv.setAdapter(upgradeAdapter);
-
-        dialog.setOnDismissListener(d -> {
+        upgradeDialog.setOnDismissListener(d -> {
             soundPool.setVolume(bgStreamId, 0,0);
         });
-        dialog.show();
+        upgradeDialog.show();
     }
 
     public void playRandomKeyboardPressSound()
