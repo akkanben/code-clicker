@@ -14,7 +14,6 @@ public class InitializeStoreItems {
     public static void hardCodedStoreItems(Game game) {
 
         // GENERATORS
-
         game.getGeneratorList().add(new Generator("Coffee", R.drawable.coffee_mug,"Liquid focus", 15, 1.10, 1));
         game.getGeneratorList().add(new Generator("Monitor", R.drawable.monitor_1,"If TWO are this useful...", 300, 1.15, 5));
         game.getGeneratorList().add(new Generator("RAM", R.drawable.ram, "More Stack Overflow tabs at once", 720, 1.14, 15));

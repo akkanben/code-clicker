@@ -29,6 +29,7 @@ import com.crudalchemy.codeclicker.models.Generator;
 import com.crudalchemy.codeclicker.models.Upgrade;
 import com.crudalchemy.codeclicker.room.CodeClickerDatabase;
 import com.crudalchemy.codeclicker.utility.LargeNumbers;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Random;
 import java.util.ArrayList;
@@ -41,11 +42,9 @@ public class MainActivity extends AppCompatActivity {
     GameLoop gameLoop;
     TextView tickerTextView;
     TextView linesPerSecondTextView;
+    TextView snackbar;
     SoundPool soundPool;
     int[] soundEffectsArray;
-
-//    GeneratorMenuRecyclerViewAdapter generatorMenuRecyclerViewAdapter;
-//    UpgradeMenuRecyclerViewAdapter upgradeMenuRecyclerViewAdapter;
     CodeClickerDatabase codeClickerDatabase;
     GeneratorMenuRecyclerViewAdapter generatorAdapter;
     UpgradeMenuRecyclerViewAdapter upgradeAdapter;
@@ -66,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.layout_activity_main);
 
         setupButtonAnimations();
+        snackbar = findViewById(R.id.main_activity_text_view_snackbar);
+        snackbar.setText("Game Saved");
 
         codeTextStringList.add(helloWorldCodeStr);
         codeTextStringList.add(recursiveRemoveCodeStr);
@@ -96,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
         game = new Game();
         hardCodedStoreItems(game);
         setUpSaveLoad();
-//        setupUpgradeItemRecyclerView();
         gameLoop = new GameLoop("game");
         gameLoop.start();
 
@@ -119,12 +119,22 @@ public class MainActivity extends AppCompatActivity {
             try {
                 while (running) {
                     runOnUiThread(new Runnable() {
+
                         @Override
                         public void run() {
                             if (game.partsOfASecond < 0.01) {
                                 game.lifetimeLineCount += game.linePerSecond;
                                 game.currentLineCount += game.linePerSecond;
+                                game.saveTimer++;
                             }
+                            if (game.getSaveTimer() > 10) {
+                                saveGame();
+                                snackbar.setVisibility(View.VISIBLE);
+                                game.setSaveTimer(0);
+                            }
+                            if (game.getSaveTimer() == 1)
+                                snackbar.setVisibility(View.INVISIBLE);
+
                             game.updateItemLists(generatorAdapter, upgradeAdapter);
                             double temp = game.currentLineCount + (game.linePerSecond * game.partsOfASecond);
                             tickerTextView.setText(LargeNumbers.convert(temp));
@@ -192,58 +202,24 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    private void setupGeneratorButton()
-//    {
-//        Button generatorButton = findViewById(R.id.button_main_activity_generators);
-//        Button upgradeButton = findViewById(R.id.button_main_activity_upgrades);
-//        Button enterButton = findViewById(R.id.button_main_activity_click);
-//        RecyclerView upgradeItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view_upgrades);
-//        RecyclerView generatorItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view_generators);
-//
-//        generatorButton.setOnClickListener(view ->
-//        {
-//            if (generatorItemListRecyclerView.getVisibility() == View.VISIBLE) {
-//                enterButton.setVisibility(View.VISIBLE);
-//                generatorItemListRecyclerView.setVisibility(View.INVISIBLE);
-//                upgradeItemListRecyclerView.setVisibility(View.INVISIBLE);
-//            }
-//            else {
-//                enterButton.setVisibility(View.INVISIBLE);
-//                generatorItemListRecyclerView.setVisibility(View.VISIBLE);
-//                upgradeItemListRecyclerView.setVisibility(View.INVISIBLE);
-//            }
-//        });
-//
-//        upgradeButton.setOnClickListener(view -> {
-//            if (upgradeItemListRecyclerView.getVisibility() == View.VISIBLE) {
-//                enterButton.setVisibility(View.VISIBLE);
-//                upgradeItemListRecyclerView.setVisibility(View.INVISIBLE);
-//                generatorItemListRecyclerView.setVisibility(View.INVISIBLE);
-//            }
-//            else {
-//                enterButton.setVisibility(View.INVISIBLE);
-//                upgradeItemListRecyclerView.setVisibility(View.VISIBLE);
-//                generatorItemListRecyclerView.setVisibility(View.INVISIBLE);
-//            }
-//        });
-//
-//    }
+    private void saveGame() {
+        codeClickerDatabase.dao().clearGame();
+        codeClickerDatabase.dao().clearGenerator();
+        codeClickerDatabase.dao().clearUpgrade();
+        codeClickerDatabase.dao().insertGame(game);
+        for (Generator generator : game.getGeneratorList()) {
+            codeClickerDatabase.dao().insertGenerator(generator);
+        }
+        for (Upgrade upgrade : game.getUpgradeList()) {
+            codeClickerDatabase.dao().insertUpgrade(upgrade);
+        }
+    }
 
-    private void setUpSaveLoad()
-    {
+        private void setUpSaveLoad() {
         Button saveButton = findViewById(R.id.save);
         Button loadButton = findViewById(R.id.load);
         saveButton.setOnClickListener(view -> {
-            codeClickerDatabase.dao().clearGame();
-            codeClickerDatabase.dao().clearGenerator();
-            codeClickerDatabase.dao().clearUpgrade();
-            codeClickerDatabase.dao().insertGame(game);
-            for(Generator generator : game.getGeneratorList()) {
-                codeClickerDatabase.dao().insertGenerator(generator);
-            }
-            for(Upgrade upgrade : game.getUpgradeList()) {
-                codeClickerDatabase.dao().insertUpgrade(upgrade);
-            }
+            saveGame();
         });
         loadButton.setOnClickListener(view -> {
             List<Generator> generatorList = codeClickerDatabase.dao().findAllGenerators();
@@ -280,23 +256,6 @@ public class MainActivity extends AppCompatActivity {
         typedCodeTextView.setText(codeStrSubstr);
         codeTextStrIndex++;
     }
-  
-//    public void setupUpgradeItemRecyclerView()
-//    {
-//        //UPGRADES
-//        RecyclerView upgradeItemListRecyclerView = (RecyclerView) findViewById(R.id.popup_upgrades_recycler_view);
-//        RecyclerView.LayoutManager upgradeLayoutManager = new LinearLayoutManager(this);
-//        upgradeItemListRecyclerView.setLayoutManager(upgradeLayoutManager);
-//        upgradeAdapter = new UpgradeMenuRecyclerViewAdapter(game, this);
-//        upgradeItemListRecyclerView.setAdapter(upgradeAdapter);
-//
-//        //GENERATORS
-//        RecyclerView generatorItemListRecyclerView = (RecyclerView) findViewById(R.id.popup_generator_recycler_view);
-//        RecyclerView.LayoutManager generatorLayoutManager = new LinearLayoutManager(this);
-//        generatorItemListRecyclerView.setLayoutManager(generatorLayoutManager);
-//        generatorAdapter = new GeneratorMenuRecyclerViewAdapter(game, this);
-//        generatorItemListRecyclerView.setAdapter(generatorAdapter);
-//    }
 
     @SuppressLint("ClickableViewAccessibility")
     public void setupPopupGeneratorButton()

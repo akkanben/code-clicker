@@ -41,6 +41,7 @@ public class Upgrade
         this.description = description;
         this.type = type;
         this.generator = generator;
+        generatorName = generator.getName();
     }
 
     public void increaseMultiplier()
@@ -55,7 +56,6 @@ public class Upgrade
 
     public void setGenerator(Generator generator) {
         this.generator = generator;
-        generatorName = generator.getName();
     }
 
     public String getName() {
