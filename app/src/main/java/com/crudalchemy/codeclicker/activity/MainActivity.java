@@ -29,6 +29,7 @@ import com.crudalchemy.codeclicker.models.Generator;
 import com.crudalchemy.codeclicker.models.Upgrade;
 import com.crudalchemy.codeclicker.room.CodeClickerDatabase;
 import com.crudalchemy.codeclicker.utility.LargeNumbers;
+import com.crudalchemy.codeclicker.utility.TypingAnimation;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Random;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     TextView linesPerSecondTextView;
     TextView snackbar;
     SoundPool soundPool;
+  
     int[] soundEffectsArray;
     CodeClickerDatabase codeClickerDatabase;
 
@@ -52,12 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
     Dialog generatorDialog;
     Dialog upgradeDialog;
-
     ArrayList<String> codeTextStringList = new ArrayList<>();
     String currentCodeTextStr;
-    String helloWorldCodeStr = "class Greeting{ \n\tpublic static void main(String args[]){\n\t\tSystem.out.println(\"Hello World!\");\n\t}\n}";
-    String recursiveRemoveCodeStr = "rm -rf *";
-    String infiniteOkayCodeStr = "while(true){\n\tSystem.out.println(\"EVERYTHING IS FINE\");\n}";
     int codeTextStrIndex = 0;
     int codeTextStringListIndex = 0;
 
@@ -81,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
         codeTextStringList.add();*/
 
         currentCodeTextStr = codeTextStringList.get(0);
+        codeTextStringList = TypingAnimation.setupTypingAnimStrings();
+        currentCodeTextStr = codeTextStringList.get(0);
+
         getSupportActionBar().hide();
         tickerTextView = findViewById(R.id.text_view_main_activity_counter);
         linesPerSecondTextView = findViewById(R.id.text_view_main_activity_lines_per_second);
@@ -243,12 +244,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void animateKeyPress(){
+    private void animateKeyPress() {
 
-        if(codeTextStrIndex >= currentCodeTextStr.length()){
+        if (codeTextStrIndex >= currentCodeTextStr.length()) {
             codeTextStrIndex = 0;
-            if(codeTextStringListIndex >= codeTextStringList.size() - 1){
+            if (codeTextStringListIndex >= codeTextStringList.size() - 1) {
                 currentCodeTextStr = codeTextStringList.get(0);
+                codeTextStringListIndex = 0;
             } else {
                 currentCodeTextStr = codeTextStringList.get(codeTextStringListIndex + 1);
                 codeTextStringListIndex++;
@@ -341,6 +343,7 @@ public class MainActivity extends AppCompatActivity {
         generatorDialog.show();
     }
 
+
     public void showPopupUpgradesDialogBox()
     {
         int bgStreamId = soundPool.play(soundEffectsArray[5],0.50f,0.50f,1,-1,1);
@@ -353,6 +356,7 @@ public class MainActivity extends AppCompatActivity {
     public void playRandomKeyboardPressSound()
     {
         Random rand = new Random();
+
         soundPool.play(soundEffectsArray[rand.nextInt(5)], (float) 0.65, (float) 0.65,1,0, 1);
     }
 
