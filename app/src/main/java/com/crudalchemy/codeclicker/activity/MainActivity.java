@@ -11,7 +11,6 @@ import androidx.room.Room;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.graphics.Typeface;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -31,7 +30,6 @@ import com.crudalchemy.codeclicker.models.Upgrade;
 import com.crudalchemy.codeclicker.room.CodeClickerDatabase;
 import com.crudalchemy.codeclicker.utility.LargeNumbers;
 
-import java.lang.reflect.Type;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
     TextView tickerTextView;
     TextView linesPerSecondTextView;
     SoundPool soundPool;
-    int[] keyPressesArray;
+    int[] soundEffectsArray;
+
 //    GeneratorMenuRecyclerViewAdapter generatorMenuRecyclerViewAdapter;
 //    UpgradeMenuRecyclerViewAdapter upgradeMenuRecyclerViewAdapter;
     CodeClickerDatabase codeClickerDatabase;
@@ -83,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         tickerTextView = findViewById(R.id.text_view_main_activity_counter);
         linesPerSecondTextView = findViewById(R.id.text_view_main_activity_lines_per_second);
         setupClick();
-        setupKeyboardSounds();
+        setupSounds();
 
         // setting up room database
         codeClickerDatabase = Room.databaseBuilder(
@@ -347,6 +346,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showPopupGeneratorDialogBox()
     {
+        int bgStreamId = soundPool.play(soundEffectsArray[5],0.75f,0.75f,1,1,1);
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.popup_generator);
@@ -355,11 +355,15 @@ public class MainActivity extends AppCompatActivity {
         rv.setLayoutManager(layoutManager);
         generatorAdapter = new GeneratorMenuRecyclerViewAdapter(game, this);
         rv.setAdapter(generatorAdapter);
+        dialog.setOnDismissListener(d -> {
+            soundPool.setVolume(bgStreamId, 0,0);
+        });
         dialog.show();
     }
 
     public void showPopupUpgradesDialogBox()
     {
+        int bgStreamId = soundPool.play(soundEffectsArray[5],0.75f,0.75f,1,1,1);
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.popup_upgrades);
@@ -368,16 +372,20 @@ public class MainActivity extends AppCompatActivity {
         rv.setLayoutManager(layoutManager);
         upgradeAdapter = new UpgradeMenuRecyclerViewAdapter(game, this);
         rv.setAdapter(upgradeAdapter);
+
+        dialog.setOnDismissListener(d -> {
+            soundPool.setVolume(bgStreamId, 0,0);
+        });
         dialog.show();
     }
 
     public void playRandomKeyboardPressSound()
     {
         Random rand = new Random();
-        soundPool.play(keyPressesArray[rand.nextInt(5)], (float) 0.65, (float) 0.65,1,0, 1);
+        soundPool.play(soundEffectsArray[rand.nextInt(5)], (float) 0.65, (float) 0.65,1,0, 1);
     }
 
-    private void setupKeyboardSounds() {
+    private void setupSounds() {
         AudioAttributes audioAttributes = new AudioAttributes
                 .Builder()
                 .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
@@ -385,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         soundPool = new SoundPool
                 .Builder()
-                .setMaxStreams(5)
+                .setMaxStreams(6)
                 .setAudioAttributes(audioAttributes)
                 .build();
         int keyA = soundPool.load(this, R.raw.new_key01, 1);
@@ -393,8 +401,9 @@ public class MainActivity extends AppCompatActivity {
         int keyC = soundPool.load(this, R.raw.new_key03, 1);
         int keyD = soundPool.load(this, R.raw.new_key04, 1);
         int keyE = soundPool.load(this, R.raw.new_key05, 1);
-        keyPressesArray = new int[]{keyA, keyB, keyC, keyD, keyE};
-        // Workaround for laggy sound
-        soundPool.play(keyPressesArray[0], 0, 0, 1, -1, 1f);
+        int bgSong = soundPool.load(this,R.raw.flowing_rocks,1);
+        soundEffectsArray = new int[]{keyA, keyB, keyC, keyD, keyE, bgSong};
+
+
     }
 }
