@@ -107,8 +107,8 @@ public class MainActivity extends AppCompatActivity {
 
     class GameLoop implements Runnable {
         private Thread thread;
-        private String threadName;
-        private volatile boolean running;
+        private final String threadName;
+        private final boolean running;
 
         public GameLoop(String threadName) {
             this.threadName = threadName;
@@ -125,17 +125,11 @@ public class MainActivity extends AppCompatActivity {
                             if (game.partsOfASecond < 0.01) {
                                 game.lifetimeLineCount += game.linePerSecond;
                                 game.currentLineCount += game.linePerSecond;
-                                game.checkForVisibilityToggle();
-                                if (generatorAdapter != null) {
-                                    generatorAdapter.notifyDataSetChanged();
-                                }
-                                if (upgradeAdapter != null) {
-                                    upgradeAdapter.notifyDataSetChanged();
-                                }
                             }
+                            game.updateItemLists(generatorAdapter, upgradeAdapter);
                             double temp = game.currentLineCount + (game.linePerSecond * game.partsOfASecond);
                             tickerTextView.setText(LargeNumbers.convert(temp));
-                            linesPerSecondTextView.setText(Double.toString(game.linePerSecond) + " lines/second");
+                            linesPerSecondTextView.setText(game.linePerSecond + " lines/second");
                         }
                     });
 
@@ -145,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                         game.partsOfASecond = 0.00001;
                 }
             } catch (InterruptedException e) {
-                System.out.println(e.toString());
+                System.out.println(e);
             }
         }
 
@@ -283,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
         }
         String cursor = "█";
         String codeStrSubstr = currentCodeTextStr.substring(0, codeTextStrIndex) + cursor;
-        TextView typedCodeTextView = (TextView) findViewById(R.id.main_typed_text_text_view);
+        TextView typedCodeTextView = findViewById(R.id.main_typed_text_text_view);
         typedCodeTextView.setText(codeStrSubstr);
         codeTextStrIndex++;
     }
@@ -356,7 +350,7 @@ public class MainActivity extends AppCompatActivity {
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.popup_generator);
-        RecyclerView rv = (RecyclerView) dialog.findViewById(R.id.popup_generator_recycler_view);
+        RecyclerView rv = dialog.findViewById(R.id.popup_generator_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv.setLayoutManager(layoutManager);
         generatorAdapter = new GeneratorMenuRecyclerViewAdapter(game, this);
@@ -369,7 +363,7 @@ public class MainActivity extends AppCompatActivity {
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.popup_upgrades);
-        RecyclerView rv = (RecyclerView) dialog.findViewById(R.id.popup_upgrades_recycler_view);
+        RecyclerView rv = dialog.findViewById(R.id.popup_upgrades_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv.setLayoutManager(layoutManager);
         upgradeAdapter = new UpgradeMenuRecyclerViewAdapter(game, this);

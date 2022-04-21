@@ -20,6 +20,7 @@ public class Upgrade
     int cost;
     UpgradeType type;
     boolean isVisible;
+    boolean isPurchasable;
 
     boolean purchased;
 
@@ -109,5 +110,13 @@ public class Upgrade
 
     public void setGeneratorName(String generatorName) {
         this.generatorName = generatorName;
+    }
+
+    public boolean isPurchasable() {
+        return isPurchasable;
+    }
+
+    public void setPurchasable(boolean purchasable) {
+        isPurchasable = purchasable;
     }
 }
