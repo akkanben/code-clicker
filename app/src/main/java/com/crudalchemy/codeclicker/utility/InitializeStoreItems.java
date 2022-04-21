@@ -18,17 +18,10 @@ public class InitializeStoreItems {
         game.getGeneratorList().add(new Generator("Monitor", R.drawable.monitor_1,"You can always use an extra monitor", 300, 1.15, 5));
         game.getGeneratorList().add(new Generator("RAM", R.drawable.ram, "More Stack Overflow tabs", 720, 1.14, 15));
         game.getGeneratorList().add(new Generator("Storage", R.drawable.hard_drive_hdd, "Hard drive is full -- time for a new hard drive", 8640, 1.13, 360));
-        game.getGeneratorList().add(new Generator("Server", R.drawable.server_rack,"Love to have more servers", 103680, 1.12, 2160));
-        game.getGeneratorList().add(new Generator("AI Assistant", R.drawable.robot_binary,"\"NULL POINTER AT: FIRST DIRECTIVE\"", 803680, 1.11, 25160));
+        //game.getGeneratorList().add(new Generator("Server", R.drawable.server_rack,"Love to have more servers", 103680, 1.12, 2160));
+        //game.getGeneratorList().add(new Generator("AI Assistant", R.drawable.robot_binary,"\"NULL POINTER AT: FIRST DIRECTIVE\"", 803680, 1.11, 25160));
 
         // KEY PRESS UPGRADES
-        game.getUpgradeList().add(new Upgrade("New Keycaps", R.drawable.keycaps, "Keycaps Description", 75, CLICK_EFFICIENCY));
-        game.getUpgradeList().add(new Upgrade("New Keycaps", R.drawable.keycaps, "Keycaps Description", 75, CLICK_EFFICIENCY));
-        game.getUpgradeList().add(new Upgrade("New Keycaps", R.drawable.keycaps, "Keycaps Description", 75, CLICK_EFFICIENCY));
-        game.getUpgradeList().add(new Upgrade("New Keycaps", R.drawable.keycaps, "Keycaps Description", 75, CLICK_EFFICIENCY));
-        game.getUpgradeList().add(new Upgrade("New Keycaps", R.drawable.keycaps, "Keycaps Description", 75, CLICK_EFFICIENCY));
-        game.getUpgradeList().add(new Upgrade("New Keycaps", R.drawable.keycaps, "Keycaps Description", 75, CLICK_EFFICIENCY));
-        game.getUpgradeList().add(new Upgrade("New Keycaps", R.drawable.keycaps, "Keycaps Description", 75, CLICK_EFFICIENCY));
         game.getUpgradeList().add(new Upgrade("New Keycaps", R.drawable.keycaps, "Keycaps Description", 75, CLICK_EFFICIENCY));
         game.getUpgradeList().add(new Upgrade("ABS Keycaps", R.drawable.keycaps, "Keycaps Description", 200, CLICK_EFFICIENCY));
         game.getUpgradeList().add(new Upgrade("RGB Lit Keycaps", R.drawable.keycaps, "Keycaps Description", 500, CLICK_EFFICIENCY));

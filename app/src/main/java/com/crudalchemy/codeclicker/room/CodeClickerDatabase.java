@@ -7,7 +7,7 @@ import com.crudalchemy.codeclicker.activity.Game;
 import com.crudalchemy.codeclicker.models.Generator;
 import com.crudalchemy.codeclicker.models.Upgrade;
 
-@Database(entities = {Game.class, Generator.class, Upgrade.class}, version = 2)
+@Database(entities = {Game.class, Generator.class, Upgrade.class}, version = 3)
 public abstract class CodeClickerDatabase extends RoomDatabase
 {
     public abstract CodeClickerDao dao();

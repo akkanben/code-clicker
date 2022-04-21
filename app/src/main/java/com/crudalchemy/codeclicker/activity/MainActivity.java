@@ -43,9 +43,6 @@ public class MainActivity extends AppCompatActivity {
     TextView linesPerSecondTextView;
     SoundPool soundPool;
     int[] soundEffectsArray;
-
-//    GeneratorMenuRecyclerViewAdapter generatorMenuRecyclerViewAdapter;
-//    UpgradeMenuRecyclerViewAdapter upgradeMenuRecyclerViewAdapter;
     CodeClickerDatabase codeClickerDatabase;
     GeneratorMenuRecyclerViewAdapter generatorAdapter;
     UpgradeMenuRecyclerViewAdapter upgradeAdapter;
@@ -96,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         game = new Game();
         hardCodedStoreItems(game);
         setUpSaveLoad();
-//        setupUpgradeItemRecyclerView();
         gameLoop = new GameLoop("game");
         gameLoop.start();
 
@@ -192,43 +188,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    private void setupGeneratorButton()
-//    {
-//        Button generatorButton = findViewById(R.id.button_main_activity_generators);
-//        Button upgradeButton = findViewById(R.id.button_main_activity_upgrades);
-//        Button enterButton = findViewById(R.id.button_main_activity_click);
-//        RecyclerView upgradeItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view_upgrades);
-//        RecyclerView generatorItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view_generators);
-//
-//        generatorButton.setOnClickListener(view ->
-//        {
-//            if (generatorItemListRecyclerView.getVisibility() == View.VISIBLE) {
-//                enterButton.setVisibility(View.VISIBLE);
-//                generatorItemListRecyclerView.setVisibility(View.INVISIBLE);
-//                upgradeItemListRecyclerView.setVisibility(View.INVISIBLE);
-//            }
-//            else {
-//                enterButton.setVisibility(View.INVISIBLE);
-//                generatorItemListRecyclerView.setVisibility(View.VISIBLE);
-//                upgradeItemListRecyclerView.setVisibility(View.INVISIBLE);
-//            }
-//        });
-//
-//        upgradeButton.setOnClickListener(view -> {
-//            if (upgradeItemListRecyclerView.getVisibility() == View.VISIBLE) {
-//                enterButton.setVisibility(View.VISIBLE);
-//                upgradeItemListRecyclerView.setVisibility(View.INVISIBLE);
-//                generatorItemListRecyclerView.setVisibility(View.INVISIBLE);
-//            }
-//            else {
-//                enterButton.setVisibility(View.INVISIBLE);
-//                upgradeItemListRecyclerView.setVisibility(View.VISIBLE);
-//                generatorItemListRecyclerView.setVisibility(View.INVISIBLE);
-//            }
-//        });
-//
-//    }
-
     private void setUpSaveLoad()
     {
         Button saveButton = findViewById(R.id.save);
@@ -280,23 +239,6 @@ public class MainActivity extends AppCompatActivity {
         typedCodeTextView.setText(codeStrSubstr);
         codeTextStrIndex++;
     }
-  
-//    public void setupUpgradeItemRecyclerView()
-//    {
-//        //UPGRADES
-//        RecyclerView upgradeItemListRecyclerView = (RecyclerView) findViewById(R.id.popup_upgrades_recycler_view);
-//        RecyclerView.LayoutManager upgradeLayoutManager = new LinearLayoutManager(this);
-//        upgradeItemListRecyclerView.setLayoutManager(upgradeLayoutManager);
-//        upgradeAdapter = new UpgradeMenuRecyclerViewAdapter(game, this);
-//        upgradeItemListRecyclerView.setAdapter(upgradeAdapter);
-//
-//        //GENERATORS
-//        RecyclerView generatorItemListRecyclerView = (RecyclerView) findViewById(R.id.popup_generator_recycler_view);
-//        RecyclerView.LayoutManager generatorLayoutManager = new LinearLayoutManager(this);
-//        generatorItemListRecyclerView.setLayoutManager(generatorLayoutManager);
-//        generatorAdapter = new GeneratorMenuRecyclerViewAdapter(game, this);
-//        generatorItemListRecyclerView.setAdapter(generatorAdapter);
-//    }
 
     @SuppressLint("ClickableViewAccessibility")
     public void setupPopupGeneratorButton()
