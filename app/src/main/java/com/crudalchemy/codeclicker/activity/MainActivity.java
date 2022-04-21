@@ -21,6 +21,7 @@ import com.crudalchemy.codeclicker.R;
 import com.crudalchemy.codeclicker.adapter.GeneratorMenuRecyclerViewAdapter;
 import com.crudalchemy.codeclicker.adapter.UpgradeMenuRecyclerViewAdapter;
 import com.crudalchemy.codeclicker.utility.LargeNumbers;
+import com.crudalchemy.codeclicker.utility.TypingAnimation;
 
 import java.io.FileNotFoundException;
 import java.util.Random;
@@ -41,21 +42,9 @@ public class MainActivity extends AppCompatActivity {
     GeneratorMenuRecyclerViewAdapter generatorAdapter;
     UpgradeMenuRecyclerViewAdapter upgradeAdapter;
 
+    // Strings for typing animation
     ArrayList<String> codeTextStringList = new ArrayList<>();
     String currentCodeTextStr;
-    String helloWorldCodeStr = "class Greeting{ \n\tpublic static void main(String args[]){\n\t\tSystem.out.println( \"Hello World!\");\n\t}\n} ";
-    //String recursiveRemoveCodeStr = "public String globalThermonuclearWar(File dir){\n\tFile[] filesInDir = dir.listFiles();\n\tif(filesInDir != null){\n\t\tfor(File file : filesInDir) {\n\t\t\tdeleteDirectory(file);\n\t\t}\n\t\n\treturn \"Shall we play a game?\"" ;
-    String infiniteOkayCodeStr = "while(true){\n\tSystem.out.println(\"EVERYTHING IS FINE\");\n} ";
-    String brevityExceptionCodeStr = "public String javaCode(String perfectlyFineCode) throws VerbosityException {\n\treturn \"Abstract \" + perfectlyFineCode + \"FactoryFactory\"\n} ";
-    String testCodeStr1 = "Testing";
-    String testCodeStr2 = "Test it again";
-    String testCodeStr3 = "Third test";
-    String a5 = "";
-    String a6 = "";
-    String a7 = "";
-    String a8 = "";
-    String a9 = "";
-
     int codeTextStrIndex = 0;
     int codeTextStringListIndex = 0;
 
@@ -65,15 +54,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_main);
 
-        codeTextStringList.add(testCodeStr1);
-        //codeTextStringList.add(helloWorldCodeStr);
-        //codeTextStringList.add(recursiveRemoveCodeStr);
-        //codeTextStringList.add(infiniteOkayCodeStr);
-        //codeTextStringList.add(brevityExceptionCodeStr);
-        codeTextStringList.add(testCodeStr2);
-        codeTextStringList.add(testCodeStr3);
-        //codeTextStringList.add();
-
+        codeTextStringList = TypingAnimation.setupTypingAnimStrings();
         currentCodeTextStr = codeTextStringList.get(0);
 
         getSupportActionBar().hide();
@@ -133,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
                             linesPerSecondTextView.setText(Double.toString(game.linePerSecond) + " lines/second");
                         }
                     });
-
 
 
                     Thread.sleep(100);
@@ -205,8 +185,7 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
 
-    private void setUpSaveLoad()
-    {
+    private void setUpSaveLoad() {
         Button saveButton = findViewById(R.id.save);
         Button loadButton = findViewById(R.id.load);
         saveButton.setOnClickListener(view -> {
@@ -221,11 +200,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void animateKeyPress(){
+    private void animateKeyPress() {
 
-        if(codeTextStrIndex >= currentCodeTextStr.length()){
+        if (codeTextStrIndex >= currentCodeTextStr.length()) {
             codeTextStrIndex = 0;
-            if(codeTextStringListIndex >= codeTextStringList.size() - 1){
+            if (codeTextStringListIndex >= codeTextStringList.size() - 1) {
                 currentCodeTextStr = codeTextStringList.get(0);
                 codeTextStringListIndex = 0;
             } else {
@@ -241,9 +220,8 @@ public class MainActivity extends AppCompatActivity {
 
         codeTextStrIndex++;
     }
-  
-    public void setupUpgradeItemRecyclerView()
-    {
+
+    public void setupUpgradeItemRecyclerView() {
         //UPGRADES
         RecyclerView upgradeItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view_upgrades);
         RecyclerView.LayoutManager upgradeLayoutManager = new LinearLayoutManager(this);
@@ -260,8 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void setupPopupGeneratorButton()
-    {
+    public void setupPopupGeneratorButton() {
         Button button = (Button) findViewById(R.id.button_main_activity_generators);
         button.setOnClickListener(b ->
         {
@@ -269,8 +246,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void setupPopupUpgradesButton()
-    {
+    public void setupPopupUpgradesButton() {
         Button button = (Button) findViewById(R.id.button_main_activity_upgrades);
         button.setOnClickListener(b ->
         {
@@ -278,8 +254,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void showPopupGeneratorDialogBox()
-    {
+    public void showPopupGeneratorDialogBox() {
 
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setCancelable(true);
@@ -292,8 +267,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    public void showPopupUpgradesDialogBox()
-    {
+    public void showPopupUpgradesDialogBox() {
 
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setCancelable(true);
@@ -308,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void playRandomKeyboardPressSound() {
         Random rand = new Random();
-        soundPool.play(keyPressesArray[rand.nextInt(5)], (float) 0.65, (float) 0.65,1,0, 1);
+        soundPool.play(keyPressesArray[rand.nextInt(5)], (float) 0.65, (float) 0.65, 1, 0, 1);
     }
 
     private void setupKeyboardSounds() {
