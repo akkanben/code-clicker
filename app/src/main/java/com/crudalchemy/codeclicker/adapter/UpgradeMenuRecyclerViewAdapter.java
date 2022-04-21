@@ -40,12 +40,7 @@ public class UpgradeMenuRecyclerViewAdapter extends RecyclerView.Adapter<Upgrade
    @Override
    public void onBindViewHolder(@NonNull UpgradeListViewHolder holder, int position)
    {
-       List<Upgrade> upgradeArrayList = new ArrayList<>();
-       for (Upgrade upgrade : game.getUpgradeList()) {
-           if (upgrade.isVisible() && !upgrade.isPurchased())
-               upgradeArrayList.add(upgrade);
-       }
-       Upgrade currentUpgrade = upgradeArrayList.get(position);
+       Upgrade currentUpgrade = game.getUpgradeList().get(position);
        if (currentUpgrade.isVisible()) {
            TextView itemFragmentTitleTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_title_text_view);
            TextView itemFragmentDescriptionTextView = (TextView) holder.itemView.findViewById(R.id.fragment_upgrade_description_text_view);
@@ -69,7 +64,7 @@ public class UpgradeMenuRecyclerViewAdapter extends RecyclerView.Adapter<Upgrade
                purchaseButton.setEnabled(true);
                purchaseButton.setOnClickListener(view -> {
                    game.buyUpgrade(currentUpgrade);
-                   UpgradeMenuRecyclerViewAdapter.this.notifyDataSetChanged();
+                   UpgradeMenuRecyclerViewAdapter.this.notifyItemRemoved(position);
                });
            }
        }

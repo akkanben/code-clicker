@@ -3,7 +3,6 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Robb/GitHub/codeFellows/401-java/code-clicker/app/src/main/res/layout/layout_activity_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/drawable/ic_launcher_background.xml" value="0.485" />
         <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/drawable/test_image.xml" value="0.5155" />
         <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/layout/activity_upgrade_menu.xml" value="0.4438405797101449" />
@@ -17,7 +16,8 @@
         <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/layout/popup.xml" value="0.33" />
         <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/layout/popup_upgrades.xml" value="0.31354166666666666" />
         <entry key="app/src/main/res/layout/fragment_upgrade_item.xml" value="0.565625" />
-        <entry key="app/src/main/res/layout/layout_activity_main.xml" value="0.3875" />
+        <entry key="app/src/main/res/layout/layout_activity_main.xml" value="0.4921875" />
+        <entry key="app/src/main/res/layout/popup_generator.xml" value="0.4583333333333333" />
       </map>
     </option>
   </component>

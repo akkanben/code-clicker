@@ -4,6 +4,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.crudalchemy.codeclicker.adapter.GeneratorMenuRecyclerViewAdapter;
+import com.crudalchemy.codeclicker.adapter.UpgradeMenuRecyclerViewAdapter;
 import com.crudalchemy.codeclicker.models.Generator;
 import com.crudalchemy.codeclicker.models.Upgrade;
 
@@ -63,16 +65,37 @@ public class Game {
         currentLineCount -= upgrade.getCost();
     }
 
-    public void checkForVisibilityToggle() {
+    public void updateItemLists(GeneratorMenuRecyclerViewAdapter generatorAdapter, UpgradeMenuRecyclerViewAdapter upgradeAdapter) {
         for (Generator generator : generatorList) {
-            if (!generator.isVisible() && generator.getNextPrice() <= lifetimeLineCount)
+            if (generator.getNextPrice() <= lifetimeLineCount) {
                 generator.setVisible(true);
+            }
+            if (!generator.isPurchasable() && generator.getNextPrice() <= currentLineCount) {
+                generator.setPurchasable(true);
+                if (generatorAdapter != null)
+                    generatorAdapter.notifyItemChanged(generatorList.indexOf(generator));
+            } else if (generator.isPurchasable() && generator.getNextPrice() > currentLineCount) {
+                generator.setPurchasable(false);
+                if (generatorAdapter != null)
+                    generatorAdapter.notifyItemChanged(generatorList.indexOf(generator));
+            }
         }
         for (Upgrade upgrade : upgradeList) {
-            if (upgrade.getCost() <= lifetimeLineCount)
+            if (upgrade.getCost() <= lifetimeLineCount) {
                 upgrade.setVisible(true);
+            }
+            if (!upgrade.isPurchasable() && upgrade.getCost() <= currentLineCount) {
+                upgrade.setPurchasable(true);
+                if (upgradeAdapter != null)
+                    upgradeAdapter.notifyItemChanged(upgradeList.indexOf(upgrade));
+            } else if (upgrade.isPurchasable() && upgrade.getCost() > currentLineCount) {
+                upgrade.setPurchasable(false);
+                if (upgradeAdapter != null)
+                    upgradeAdapter.notifyItemChanged((upgradeList.indexOf(upgrade)));
+            }
         }
     }
+
 
     public List<Generator> getGeneratorList() {
         return generatorList;

@@ -18,6 +18,7 @@ public class Generator
     int multiplier = 1;
     double currentProductivity;
     boolean isVisible;
+    boolean isPurchasable;
 
     public Generator(String name, int image, String description, int baseCost, double priceGrowthRate,
                      double productivityBase)
@@ -132,5 +133,13 @@ public class Generator
 
     public void setVisible(boolean visible) {
         isVisible = visible;
+    }
+
+    public boolean isPurchasable() {
+        return isPurchasable;
+    }
+
+    public void setPurchasable(boolean purchasable) {
+        isPurchasable = purchasable;
     }
 }

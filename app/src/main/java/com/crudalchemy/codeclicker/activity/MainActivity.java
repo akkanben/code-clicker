@@ -2,22 +2,25 @@ package com.crudalchemy.codeclicker.activity;
 
 import static com.crudalchemy.codeclicker.models.UpgradeType.GENERATOR_EFFICIENCY;
 import static com.crudalchemy.codeclicker.utility.InitializeStoreItems.hardCodedStoreItems;
-import static com.crudalchemy.codeclicker.utility.SaveIO.readFromFile;
-import static com.crudalchemy.codeclicker.utility.SaveIO.writeToFile;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
-import androidx.room.RoomDatabase;
 
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.graphics.Typeface;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.crudalchemy.codeclicker.R;
@@ -28,7 +31,7 @@ import com.crudalchemy.codeclicker.models.Upgrade;
 import com.crudalchemy.codeclicker.room.CodeClickerDatabase;
 import com.crudalchemy.codeclicker.utility.LargeNumbers;
 
-import java.io.FileNotFoundException;
+import java.lang.reflect.Type;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
     TextView linesPerSecondTextView;
     SoundPool soundPool;
     int[] keyPressesArray;
-    GeneratorMenuRecyclerViewAdapter generatorMenuRecyclerViewAdapter;
-    UpgradeMenuRecyclerViewAdapter upgradeMenuRecyclerViewAdapter;
+//    GeneratorMenuRecyclerViewAdapter generatorMenuRecyclerViewAdapter;
+//    UpgradeMenuRecyclerViewAdapter upgradeMenuRecyclerViewAdapter;
     CodeClickerDatabase codeClickerDatabase;
     GeneratorMenuRecyclerViewAdapter generatorAdapter;
     UpgradeMenuRecyclerViewAdapter upgradeAdapter;
@@ -56,10 +59,14 @@ public class MainActivity extends AppCompatActivity {
     int codeTextStrIndex = 0;
     int codeTextStringListIndex = 0;
 
+    Animation scaleUpKeyboard, scaleDownKeyboard, scaleUpGeneratorButton, scaleDownGeneratorButton, scaleUpUpgradeButton, scaleDownUpgradeButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_main);
+
+        setupButtonAnimations();
 
         codeTextStringList.add(helloWorldCodeStr);
         codeTextStringList.add(recursiveRemoveCodeStr);
@@ -90,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         game = new Game();
         hardCodedStoreItems(game);
         setUpSaveLoad();
-        setupUpgradeItemRecyclerView();
+//        setupUpgradeItemRecyclerView();
         gameLoop = new GameLoop("game");
         gameLoop.start();
 
@@ -100,8 +107,8 @@ public class MainActivity extends AppCompatActivity {
 
     class GameLoop implements Runnable {
         private Thread thread;
-        private String threadName;
-        private volatile boolean running;
+        private final String threadName;
+        private final boolean running;
 
         public GameLoop(String threadName) {
             this.threadName = threadName;
@@ -118,17 +125,11 @@ public class MainActivity extends AppCompatActivity {
                             if (game.partsOfASecond < 0.01) {
                                 game.lifetimeLineCount += game.linePerSecond;
                                 game.currentLineCount += game.linePerSecond;
-                                game.checkForVisibilityToggle();
-                                if (generatorAdapter != null) {
-                                    generatorAdapter.notifyDataSetChanged();
-                                }
-                                if (upgradeAdapter != null) {
-                                    upgradeAdapter.notifyDataSetChanged();
-                                }
                             }
+                            game.updateItemLists(generatorAdapter, upgradeAdapter);
                             double temp = game.currentLineCount + (game.linePerSecond * game.partsOfASecond);
                             tickerTextView.setText(LargeNumbers.convert(temp));
-                            linesPerSecondTextView.setText(Double.toString(game.linePerSecond) + " lines/second");
+                            linesPerSecondTextView.setText(LargeNumbers.convertWithDecimals(game.linePerSecond) + "/second ");
                         }
                     });
 
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                         game.partsOfASecond = 0.00001;
                 }
             } catch (InterruptedException e) {
-                System.out.println(e.toString());
+                System.out.println(e);
             }
         }
 
@@ -151,14 +152,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupClick() {
-        Button button = findViewById(R.id.button_main_activity_click);
-        button.setOnClickListener(view -> {
+        ImageView keyboardButton = findViewById(R.id.button_main_activity_click);
+        keyboardButton.setOnClickListener(view -> {
             runOnUiThread(() -> {
                 playRandomKeyboardPressSound();
                 game.lifetimeLineCount += game.linesPerClick;
                 game.currentLineCount += game.linesPerClick;
                 animateKeyPress();
             });
+        });
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setupButtonAnimations()
+    {
+        ImageView keyboardButton = findViewById(R.id.button_main_activity_click);
+        scaleUpKeyboard = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        scaleDownKeyboard = AnimationUtils.loadAnimation(this, R.anim.scale_down);
+
+        keyboardButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    keyboardButton.startAnimation(scaleUpKeyboard);
+                    setupClick();
+                    runOnUiThread(() -> {
+                        playRandomKeyboardPressSound();
+                        game.lifetimeLineCount += game.linesPerClick;
+                        game.currentLineCount += game.linesPerClick;
+                        animateKeyPress();
+                    });
+                }
+                else if(motionEvent.getAction() == MotionEvent.ACTION_UP)
+                {
+                    keyboardButton.startAnimation(scaleDownKeyboard);
+                }
+                return true;
+            }
         });
     }
 
@@ -246,43 +277,71 @@ public class MainActivity extends AppCompatActivity {
         }
         String cursor = "█";
         String codeStrSubstr = currentCodeTextStr.substring(0, codeTextStrIndex) + cursor;
-        TextView typedCodeTextView = (TextView) findViewById(R.id.main_typed_text_text_view);
+        TextView typedCodeTextView = findViewById(R.id.main_typed_text_text_view);
         typedCodeTextView.setText(codeStrSubstr);
         codeTextStrIndex++;
     }
   
-    public void setupUpgradeItemRecyclerView()
-    {
-        //UPGRADES
-        RecyclerView upgradeItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view_upgrades);
-        RecyclerView.LayoutManager upgradeLayoutManager = new LinearLayoutManager(this);
-        upgradeItemListRecyclerView.setLayoutManager(upgradeLayoutManager);
-        upgradeMenuRecyclerViewAdapter = new UpgradeMenuRecyclerViewAdapter(game, this);
-        upgradeItemListRecyclerView.setAdapter(upgradeMenuRecyclerViewAdapter);
+//    public void setupUpgradeItemRecyclerView()
+//    {
+//        //UPGRADES
+//        RecyclerView upgradeItemListRecyclerView = (RecyclerView) findViewById(R.id.popup_upgrades_recycler_view);
+//        RecyclerView.LayoutManager upgradeLayoutManager = new LinearLayoutManager(this);
+//        upgradeItemListRecyclerView.setLayoutManager(upgradeLayoutManager);
+//        upgradeAdapter = new UpgradeMenuRecyclerViewAdapter(game, this);
+//        upgradeItemListRecyclerView.setAdapter(upgradeAdapter);
+//
+//        //GENERATORS
+//        RecyclerView generatorItemListRecyclerView = (RecyclerView) findViewById(R.id.popup_generator_recycler_view);
+//        RecyclerView.LayoutManager generatorLayoutManager = new LinearLayoutManager(this);
+//        generatorItemListRecyclerView.setLayoutManager(generatorLayoutManager);
+//        generatorAdapter = new GeneratorMenuRecyclerViewAdapter(game, this);
+//        generatorItemListRecyclerView.setAdapter(generatorAdapter);
+//    }
 
-        //GENERATORS
-        RecyclerView generatorItemListRecyclerView = (RecyclerView) findViewById(R.id.upgrade_menu_list_recycler_view_generators);
-        RecyclerView.LayoutManager generatorLayoutManager = new LinearLayoutManager(this);
-        generatorItemListRecyclerView.setLayoutManager(generatorLayoutManager);
-        generatorMenuRecyclerViewAdapter = new GeneratorMenuRecyclerViewAdapter(game, this);
-        generatorItemListRecyclerView.setAdapter(generatorMenuRecyclerViewAdapter);
-    }
-
+    @SuppressLint("ClickableViewAccessibility")
     public void setupPopupGeneratorButton()
     {
-        Button button = (Button) findViewById(R.id.button_main_activity_generators);
-        button.setOnClickListener(b ->
-        {
-            showPopupGeneratorDialogBox();
+        Button button = findViewById(R.id.button_main_activity_generators);
+        scaleUpGeneratorButton = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        scaleDownGeneratorButton = AnimationUtils.loadAnimation(this, R.anim.scale_down);
+        button.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    button.startAnimation(scaleUpGeneratorButton);
+                }
+                else if(motionEvent.getAction() == MotionEvent.ACTION_UP)
+                {
+                    showPopupGeneratorDialogBox();
+                    button.startAnimation(scaleDownGeneratorButton);
+                }
+                return true;
+            }
         });
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public void setupPopupUpgradesButton()
     {
-        Button button = (Button) findViewById(R.id.button_main_activity_upgrades);
-        button.setOnClickListener(b ->
-        {
-            showPopupUpgradesDialogBox();
+        Button button = findViewById(R.id.button_main_activity_upgrades);
+        scaleUpUpgradeButton = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        scaleDownUpgradeButton = AnimationUtils.loadAnimation(this, R.anim.scale_down);
+        button.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    button.startAnimation(scaleUpUpgradeButton);
+                }
+                else if(motionEvent.getAction() == MotionEvent.ACTION_UP)
+                {
+                    showPopupUpgradesDialogBox();
+                    button.startAnimation(scaleDownUpgradeButton);
+                }
+                return true;
+            }
         });
     }
 
@@ -291,7 +350,7 @@ public class MainActivity extends AppCompatActivity {
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.popup_generator);
-        RecyclerView rv = (RecyclerView) dialog.findViewById(R.id.popup_generator_recycler_view);
+        RecyclerView rv = dialog.findViewById(R.id.popup_generator_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv.setLayoutManager(layoutManager);
         generatorAdapter = new GeneratorMenuRecyclerViewAdapter(game, this);
@@ -304,7 +363,7 @@ public class MainActivity extends AppCompatActivity {
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.popup_upgrades);
-        RecyclerView rv = (RecyclerView) dialog.findViewById(R.id.popup_upgrades_recycler_view);
+        RecyclerView rv = dialog.findViewById(R.id.popup_upgrades_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv.setLayoutManager(layoutManager);
         upgradeAdapter = new UpgradeMenuRecyclerViewAdapter(game, this);

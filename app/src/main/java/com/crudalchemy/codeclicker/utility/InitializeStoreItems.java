@@ -14,7 +14,8 @@ public class InitializeStoreItems {
     public static void hardCodedStoreItems(Game game) {
 
         // GENERATORS
-        game.getGeneratorList().add(new Generator("Coffee", R.drawable.coffee_mug,"Liquid focus", 10, 1.07, 1));
+
+        game.getGeneratorList().add(new Generator("Coffee", R.drawable.coffee_mug,"A productivity boost", 15, 1.10, 1));
         game.getGeneratorList().add(new Generator("Monitor", R.drawable.monitor_1,"You can always use an extra monitor", 300, 1.15, 5));
         game.getGeneratorList().add(new Generator("RAM", R.drawable.ram, "More Stack Overflow tabs at once", 720, 1.14, 15));
         game.getGeneratorList().add(new Generator("Storage", R.drawable.hard_drive_hdd, "Hard drive is full -- time for a new hard drive", 8640, 1.13, 360));
