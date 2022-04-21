@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         
         setupButtonAnimations();
         snackbar = findViewById(R.id.main_activity_text_view_snackbar);
-        snackbar.setText("Game Saved")
+        snackbar.setText("Game Saved");
 
         getSupportActionBar().hide();
         tickerTextView = findViewById(R.id.text_view_main_activity_counter);
