@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                             game.updateItemLists(generatorAdapter, upgradeAdapter);
                             double temp = game.currentLineCount + (game.linePerSecond * game.partsOfASecond);
                             tickerTextView.setText(LargeNumbers.convert(temp));
-                            linesPerSecondTextView.setText(game.linePerSecond + " lines/second");
+                            linesPerSecondTextView.setText(LargeNumbers.convertWithDecimals(game.linePerSecond) + "/second ");
                         }
                     });
 
