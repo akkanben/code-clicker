@@ -1,6 +1,8 @@
 package com.crudalchemy.codeclicker.adapter;
 
 import android.content.Context;
+import android.media.AudioAttributes;
+import android.media.SoundPool;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,8 @@ public class UpgradeMenuRecyclerViewAdapter extends RecyclerView.Adapter<Upgrade
 {
     Game game;
     Context callingActivity;
+    SoundPool soundPool;
+    int buySound;
 
     public UpgradeMenuRecyclerViewAdapter(Game game, Context callingActivity)
     {
@@ -34,6 +38,17 @@ public class UpgradeMenuRecyclerViewAdapter extends RecyclerView.Adapter<Upgrade
     public UpgradeListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
         View upgradeItemFragment = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_upgrade_item, parent, false);
+        AudioAttributes audioAttributes = new AudioAttributes
+                .Builder()
+                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+        soundPool = new SoundPool
+                .Builder()
+                .setMaxStreams(1)
+                .setAudioAttributes(audioAttributes)
+                .build();
+        buySound = soundPool.load(callingActivity, R.raw.clothbelt, 1);
         return new UpgradeListViewHolder(upgradeItemFragment);
     }
 
@@ -64,6 +79,7 @@ public class UpgradeMenuRecyclerViewAdapter extends RecyclerView.Adapter<Upgrade
                purchaseButton.setEnabled(true);
                purchaseButton.setOnClickListener(view -> {
                    game.buyUpgrade(currentUpgrade);
+                   soundPool.play(buySound,1,1,1,0,1);
                    UpgradeMenuRecyclerViewAdapter.this.notifyItemRemoved(position);
                });
            }

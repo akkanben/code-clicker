@@ -346,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showPopupGeneratorDialogBox()
     {
-        int bgStreamId = soundPool.play(soundEffectsArray[5],1,1,1,1,1);
+        int bgStreamId = soundPool.play(soundEffectsArray[5],0.75f,0.75f,1,1,1);
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.popup_generator);
@@ -363,7 +363,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showPopupUpgradesDialogBox()
     {
-        int bgStreamId = soundPool.play(soundEffectsArray[5],1,1,1,1,1);
+        int bgStreamId = soundPool.play(soundEffectsArray[5],0.75f,0.75f,1,1,1);
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.popup_upgrades);
