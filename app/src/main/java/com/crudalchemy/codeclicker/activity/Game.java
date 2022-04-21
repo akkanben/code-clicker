@@ -70,7 +70,11 @@ public class Game {
     public void updateItemLists(GeneratorMenuRecyclerViewAdapter generatorAdapter, UpgradeMenuRecyclerViewAdapter upgradeAdapter) {
         for (Generator generator : generatorList) {
             if (generator.getNextPrice() <= lifetimeLineCount) {
-                generator.setVisible(true);
+                if (!generator.isVisible()) {
+                    generator.setVisible(true);
+                    if (generatorAdapter != null)
+                        generatorAdapter.notifyItemChanged(generatorList.indexOf(generator));
+                }
             }
             if (!generator.isPurchasable() && generator.getNextPrice() <= currentLineCount) {
                 generator.setPurchasable(true);
@@ -84,7 +88,11 @@ public class Game {
         }
         for (Upgrade upgrade : upgradeList) {
             if (upgrade.getCost() <= lifetimeLineCount) {
-                upgrade.setVisible(true);
+                if (!upgrade.isVisible()) {
+                    upgrade.setVisible(true);
+                    if (upgradeAdapter != null)
+                        upgradeAdapter.notifyItemChanged(upgradeList.indexOf(upgrade));
+                }
             }
             if (!upgrade.isPurchasable() && upgrade.getCost() <= currentLineCount) {
                 upgrade.setPurchasable(true);

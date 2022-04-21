@@ -46,8 +46,12 @@ public class MainActivity extends AppCompatActivity {
     SoundPool soundPool;
     int[] soundEffectsArray;
     CodeClickerDatabase codeClickerDatabase;
+
     GeneratorMenuRecyclerViewAdapter generatorAdapter;
     UpgradeMenuRecyclerViewAdapter upgradeAdapter;
+
+    Dialog generatorDialog;
+    Dialog upgradeDialog;
 
     ArrayList<String> codeTextStringList = new ArrayList<>();
     String currentCodeTextStr;
@@ -63,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_main);
-
         setupButtonAnimations();
         snackbar = findViewById(R.id.main_activity_text_view_snackbar);
         snackbar.setText("Game Saved");
@@ -78,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
         codeTextStringList.add();*/
 
         currentCodeTextStr = codeTextStringList.get(0);
-
         getSupportActionBar().hide();
         tickerTextView = findViewById(R.id.text_view_main_activity_counter);
         linesPerSecondTextView = findViewById(R.id.text_view_main_activity_lines_per_second);
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         game = new Game();
+        setupDialogBoxes();
         hardCodedStoreItems(game);
         setUpSaveLoad();
         gameLoop = new GameLoop("game");
@@ -303,39 +306,46 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void setupDialogBoxes() {
+        generatorDialog = new Dialog(MainActivity.this);
+        upgradeDialog = new Dialog(MainActivity.this);
+        generatorDialog.setContentView(R.layout.popup_generator);
+        upgradeDialog.setContentView(R.layout.popup_upgrades);
+
+        RecyclerView upgradeDialogRecyclerView = upgradeDialog.findViewById(R.id.popup_upgrades_recycler_view);
+        RecyclerView generatorDialogRecyclerView = generatorDialog.findViewById(R.id.popup_generator_recycler_view);
+
+        RecyclerView.LayoutManager generatorLayoutManager = new LinearLayoutManager(this);
+        generatorDialog.setCancelable(true);
+        generatorDialogRecyclerView.setLayoutManager(generatorLayoutManager);
+        generatorDialogRecyclerView.setAdapter(generatorAdapter);
+
+        RecyclerView.LayoutManager upgradeLayoutManager = new LinearLayoutManager(this);
+        upgradeDialog.setCancelable(true);
+        upgradeDialogRecyclerView.setLayoutManager(upgradeLayoutManager);
+        upgradeAdapter = new UpgradeMenuRecyclerViewAdapter(game, this);
+        upgradeDialogRecyclerView.setAdapter(upgradeAdapter);
+    }
+
     public void showPopupGeneratorDialogBox()
     {
         int bgStreamId = soundPool.play(soundEffectsArray[5],0.50f,0.50f,1,-1,1);
-        final Dialog dialog = new Dialog(MainActivity.this);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.popup_generator);
-        RecyclerView rv = dialog.findViewById(R.id.popup_generator_recycler_view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        rv.setLayoutManager(layoutManager);
-        generatorAdapter = new GeneratorMenuRecyclerViewAdapter(game, this);
-        rv.setAdapter(generatorAdapter);
-        dialog.setOnDismissListener(d -> {
+
+
+
+        generatorDialog.setOnDismissListener(d -> {
             soundPool.setVolume(bgStreamId, 0,0);
         });
-        dialog.show();
+        generatorDialog.show();
     }
 
     public void showPopupUpgradesDialogBox()
     {
         int bgStreamId = soundPool.play(soundEffectsArray[5],0.50f,0.50f,1,-1,1);
-        final Dialog dialog = new Dialog(MainActivity.this);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.popup_upgrades);
-        RecyclerView rv = dialog.findViewById(R.id.popup_upgrades_recycler_view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        rv.setLayoutManager(layoutManager);
-        upgradeAdapter = new UpgradeMenuRecyclerViewAdapter(game, this);
-        rv.setAdapter(upgradeAdapter);
-
-        dialog.setOnDismissListener(d -> {
+        upgradeDialog.setOnDismissListener(d -> {
             soundPool.setVolume(bgStreamId, 0,0);
         });
-        dialog.show();
+        upgradeDialog.show();
     }
 
     public void playRandomKeyboardPressSound()

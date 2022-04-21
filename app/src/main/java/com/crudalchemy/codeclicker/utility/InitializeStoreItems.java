@@ -26,7 +26,7 @@ public class InitializeStoreItems {
         game.getUpgradeList().add(new Upgrade("Lumbar Support", R.drawable.chair_1, "Code with your knees, not your back", 250, CLICK_EFFICIENCY));
         game.getUpgradeList().add(new Upgrade("ABS Keys", R.drawable.key_caps_3, "Shiny!", 2000, CLICK_EFFICIENCY));
         game.getUpgradeList().add(new Upgrade("Head rest", R.drawable.chair_2, "Like a pillow", 5500, CLICK_EFFICIENCY));
-        game.getUpgradeList().add(new Upgrade("RGB backlight", R.drawable.keyboard_color_rgb, "A different color for every IDE", 10000, CLICK_EFFICIENCY));
+        //game.getUpgradeList().add(new Upgrade("RGB backlight", R.drawable.keyboard_color_rgb, "A different color for every IDE", 10000, CLICK_EFFICIENCY));
         game.getUpgradeList().add(new Upgrade("Doubleshot Keycaps", R.drawable.key_caps_2, "Stand the test of time", 50000, CLICK_EFFICIENCY));
         game.getUpgradeList().add(new Upgrade("\"Coding\" chair", R.drawable.chair_3, "For 1337 coding", 150000, CLICK_EFFICIENCY));
 
