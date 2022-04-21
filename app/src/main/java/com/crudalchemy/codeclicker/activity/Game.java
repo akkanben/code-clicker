@@ -41,17 +41,20 @@ public class Game {
 
     public void buyGenerator(Generator generator) {
         currentLineCount -= generator.getNextPrice();
-        linePerSecond += generator.getNextProductivity();
-        generator.add();
+        linePerSecond += generator.getRateIncrease();
+        generator.increment();
     }
 
     public void buyUpgrade(Upgrade upgrade) {
         switch (upgrade.getType()) {
             case GENERATOR_EFFICIENCY:
                 upgrade.increaseMultiplier();
+                double activeProductivity = upgrade.getGenerator().getCurrentProductivity();
+                linePerSecond += upgrade.getGenerator().getCurrentProductivity();
+                upgrade.getGenerator().setCurrentProductivity(activeProductivity * 2);
                 break;
             case GLOBAL_LINE_PRODUCTION_MULTIPLIER:
-                linePerSecond *= 0.01;
+                linePerSecond *= 1.01;
                 break;
             case CLICK_EFFICIENCY:
                 linesPerClick *= 2;

@@ -33,6 +33,16 @@ public class Upgrade
         this.type = type;
     }
 
+    public Upgrade(String name, int image, String description, int cost, UpgradeType type, Generator generator)
+    {
+        this.name = name;
+        this.image = image;
+        this.cost = cost;
+        this.description = description;
+        this.type = type;
+        this.generator = generator;
+    }
+
     public void increaseMultiplier()
     {
         int newMultiplier = generator.getMultiplier();
