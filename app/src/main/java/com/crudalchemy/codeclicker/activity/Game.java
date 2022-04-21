@@ -22,6 +22,7 @@ public class Game {
     double currentLineCount;
     int linesPerClick;
     double partsOfASecond;
+    int saveTimer;
     @Ignore
     List<Generator> generatorList;
     @Ignore
@@ -35,6 +36,7 @@ public class Game {
         linesPerClick = 1;
         currentLineCount = 0.0;
         partsOfASecond = 0.0;
+        saveTimer = 0;
         generatorList = new ArrayList<>();
         upgradeList = new ArrayList<>();
     }
@@ -151,5 +153,13 @@ public class Game {
 
     public void setPartsOfASecond(double partsOfASecond) {
         this.partsOfASecond = partsOfASecond;
+    }
+
+    public int getSaveTimer() {
+        return saveTimer;
+    }
+
+    public void setSaveTimer(int saveTimer) {
+        this.saveTimer = saveTimer;
     }
 }
