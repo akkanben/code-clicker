@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
     TextView linesPerSecondTextView;
     TextView snackbar;
     SoundPool soundPool;
-
-    int[] lineBonusArr = new int[5];
   
     int[] soundEffectsArray;
     CodeClickerDatabase codeClickerDatabase;
@@ -82,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
         setupClick();
         setupSounds();
 
-        // setting up room database
         codeClickerDatabase = Room.databaseBuilder(
                 getApplicationContext(),
                 CodeClickerDatabase.class,
@@ -97,12 +94,6 @@ public class MainActivity extends AppCompatActivity {
         }
         setupDialogBoxes();
         setUpSaveLoad();
-
-        lineBonusArr[0] = (R.id.main_plus_one_text_view);
-        lineBonusArr[1] = (R.id.main_plus_two_text_view);
-        lineBonusArr[2] = (R.id.main_plus_three_text_view);
-        lineBonusArr[3] = (R.id.main_plus_four_text_view);
-        lineBonusArr[4] = (R.id.main_plus_five_text_view);
 
         gameLoop = new GameLoop("game");
         gameLoop.start();
@@ -200,9 +191,6 @@ public class MainActivity extends AppCompatActivity {
                         game.lifetimeLineCount += game.linesPerClick;
                         game.currentLineCount += game.linesPerClick;
                         animateKeyPress();
-                        Random randView = new Random();
-                        TextView increaseView = (TextView) findViewById(lineBonusArr[randView.nextInt(5)]);
-                        increaseView.setText("+" + game.linesPerClick);
                     });
                 }
                 else if(motionEvent.getAction() == MotionEvent.ACTION_UP)
@@ -215,9 +203,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveGame() {
-        //codeClickerDatabase.dao().clearGame();
-        //codeClickerDatabase.dao().clearGenerator();
-        //codeClickerDatabase.dao().clearUpgrade();
         codeClickerDatabase.dao().insertGame(game);
         for (Generator generator : game.getGeneratorList()) {
             codeClickerDatabase.dao().insertGenerator(generator);
@@ -232,9 +217,6 @@ public class MainActivity extends AppCompatActivity {
         List<Upgrade> upgradeList = codeClickerDatabase.dao().findAllUpgrades();
         game = codeClickerDatabase.dao().find();
         if (generatorList != null && upgradeList != null && game != null) {
-            //codeClickerDatabase.dao().clearGame();
-            //codeClickerDatabase.dao().clearUpgrade();
-            //codeClickerDatabase.dao().clearGenerator();
             for(Upgrade upgrade : upgradeList)
             {
                 if(upgrade.getType().equals(GENERATOR_EFFICIENCY))
@@ -255,8 +237,7 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
-
-    // CURRENTLY HIDDEN
+    
     private void setUpSaveLoad() {
         Button saveButton = findViewById(R.id.save);
         Button loadButton = findViewById(R.id.load);
