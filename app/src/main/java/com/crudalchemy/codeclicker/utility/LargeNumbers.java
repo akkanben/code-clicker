@@ -5,7 +5,7 @@ import java.math.RoundingMode;
 
 
 public class LargeNumbers {
-    private static final String[] stringReferences = {"line", "lines", "million", "billion", "trillion", "quadrillion"};
+    private static final String[] stringReferences = {"line", "lines", "million", "billion", "trillion", "quadrillion", "ERRRRR"};
 
     public static String convert(double value) {
         int multipliers = 0; // set to -2 because dictionaryNumbers will be used only with millions and higher

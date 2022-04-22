@@ -338,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showPopupGeneratorDialogBox()
     {
-        int bgStreamId = soundPool.play(soundEffectsArray[5],0.50f,0.50f,1,-1,1);
+        int bgStreamId = soundPool.play(soundEffectsArray[5],0.35f,0.35f,1,-1,1);
 
 
 
@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showPopupUpgradesDialogBox()
     {
-        int bgStreamId = soundPool.play(soundEffectsArray[5],0.50f,0.50f,1,-1,1);
+        int bgStreamId = soundPool.play(soundEffectsArray[5],0.35f,0.35f,1,-1,1);
         upgradeDialog.setOnDismissListener(d -> {
             soundPool.setVolume(bgStreamId, 0,0);
         });
