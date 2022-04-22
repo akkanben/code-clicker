@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
     class GameLoop implements Runnable {
         private Thread thread;
         private final String threadName;
-        private final boolean running;
+        private boolean running;
 
         public GameLoop(String threadName) {
             this.threadName = threadName;
@@ -123,6 +123,10 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             if (game.partsOfASecond < 0.01) {
+                                if (game.currentLineCount > 1002000000000000000.0) {
+                                    killscreen();
+                                    running = false;
+                                }
                                 game.fillActiveLists(generatorAdapter, upgradeAdapter);
                                 game.lifetimeLineCount += game.linePerSecond;
                                 game.currentLineCount += game.linePerSecond;
@@ -339,15 +343,11 @@ public class MainActivity extends AppCompatActivity {
     public void showPopupGeneratorDialogBox()
     {
 //        int bgStreamId = soundPool.play(soundEffectsArray[5],0.35f,0.35f,1,-1,1);
-
-
-
 //        generatorDialog.setOnDismissListener(d -> {
 //            soundPool.setVolume(bgStreamId, 0,0);
 //        });
         generatorDialog.show();
     }
-
 
     public void showPopupUpgradesDialogBox()
     {
