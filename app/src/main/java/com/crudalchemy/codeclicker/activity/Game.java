@@ -1,5 +1,7 @@
 package com.crudalchemy.codeclicker.activity;
 
+import android.content.Intent;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -71,13 +73,11 @@ public class Game {
                 break;
             case DEMO_BOOST:
                 linePerSecond = Math.pow(linePerSecond, 2) * 2;
+                break;
             case SINGULARITY:
                 linePerSecond = Math.pow(linePerSecond, 2) * 2;
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                currentLineCount = 1004000000000000000.0;
+                linePerSecond = 802040000000000.0;
         }
         upgrade.setPurchased(true);
         upgradeList.remove(upgrade);
@@ -134,7 +134,6 @@ public class Game {
            }
        }
     }
-
 
     public List<Generator> getGeneratorList() {
         return generatorList;

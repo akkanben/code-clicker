@@ -33,7 +33,7 @@ public class InitializeStoreItems {
         upgradeList.add(new Upgrade((long) upgradeList.size(), "Demo Tool 1", R.drawable.cash_funding_loot_money_1, "Boost", 100, DEMO_BOOST));
         upgradeList.add(new Upgrade((long) upgradeList.size(), "Demo Tool 2", R.drawable.cash_funding_loot_money_2, "Boost", 1000, DEMO_BOOST));
         upgradeList.add(new Upgrade((long) upgradeList.size(), "Demo Tool 3", R.drawable.cash_funding_loot_money_3, "Boost", 100000, DEMO_BOOST));
-        upgradeList.add(new Upgrade((long) upgradeList.size(), "Singularity", R.drawable.singularity, "Boost", 10000000, SINGULARITY));
+        upgradeList.add(new Upgrade((long) upgradeList.size(), "Singularity", R.drawable.singularity, "Boost", 1000000000, SINGULARITY));
 
         // KEY PRESS UPGRADES
         upgradeList.add(new Upgrade((long) upgradeList.size(),"Mechanical Keyboard", R.drawable.keycaps, "If it clacks like a duck...", 25, CLICK_EFFICIENCY));
