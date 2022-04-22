@@ -11,6 +11,7 @@ import androidx.room.Room;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -382,4 +383,18 @@ public class MainActivity extends AppCompatActivity {
         int bgSong = soundPool.load(this,R.raw.electronicdrums,1);
         soundEffectsArray = new int[]{keyA, keyB, keyC, keyD, keyE, bgSong};
     }
+
+    private void killscreen() {
+
+        //game.linePerSecond = 0;
+
+        //TextView lineRateCounter = (TextView) findViewById(R.id.text_view_main_activity_lines_per_second);
+        //TextView lineCounter = (TextView) findViewById(R.id.text_view_main_activity_counter);
+        //lineRateCounter.setText("INTEGER_OVERFLOW");
+        //lineCounter.setText("ERRRRRRRRRR lines");
+
+        Intent goToKillscreen = new Intent(MainActivity.this, KillscreenActivity.class);
+        startActivity(goToKillscreen);
+    }
+
 }
