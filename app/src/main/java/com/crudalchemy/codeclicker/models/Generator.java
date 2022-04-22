@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Generator
 {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     public Long id;
     String name;
     int image;
@@ -20,9 +20,10 @@ public class Generator
     boolean isVisible;
     boolean isPurchasable;
 
-    public Generator(String name, int image, String description, int baseCost, double priceGrowthRate,
+    public Generator(Long id, String name, int image, String description, int baseCost, double priceGrowthRate,
                      double productivityBase)
     {
+        this.id = id;
         this.name = name;
         this.image = image;
         this.description = description;
@@ -141,5 +142,13 @@ public class Generator
 
     public void setPurchasable(boolean purchasable) {
         isPurchasable = purchasable;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
