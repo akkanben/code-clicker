@@ -9,7 +9,7 @@ import androidx.room.Relation;
 @Entity
 public class Upgrade
 {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     public Long id;
     @Ignore
     Generator generator;
@@ -24,8 +24,9 @@ public class Upgrade
 
     boolean purchased;
 
-    public Upgrade(String name, int image, String description, int cost, UpgradeType type)
+    public Upgrade(Long id, String name, int image, String description, int cost, UpgradeType type)
     {
+        this.id = id;
         this.name = name;
         this.image = image;
         this.cost = cost;
@@ -33,8 +34,9 @@ public class Upgrade
         this.type = type;
     }
 
-    public Upgrade(String name, int image, String description, int cost, UpgradeType type, Generator generator)
+    public Upgrade(Long id, String name, int image, String description, int cost, UpgradeType type, Generator generator)
     {
+        this.id = id;
         this.name = name;
         this.image = image;
         this.cost = cost;
@@ -128,5 +130,13 @@ public class Upgrade
 
     public void setPurchasable(boolean purchasable) {
         isPurchasable = purchasable;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

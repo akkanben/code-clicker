@@ -8,6 +8,7 @@ import com.crudalchemy.codeclicker.adapter.GeneratorMenuRecyclerViewAdapter;
 import com.crudalchemy.codeclicker.adapter.UpgradeMenuRecyclerViewAdapter;
 import com.crudalchemy.codeclicker.models.Generator;
 import com.crudalchemy.codeclicker.models.Upgrade;
+import com.crudalchemy.codeclicker.models.UpgradeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 @Entity
 public class Game {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     public Long id;
     double lifetimeLineCount;
     double linePerSecond;
@@ -35,6 +36,7 @@ public class Game {
     //int parcelData;
 
     public Game() {
+        id = 1L;
         lifetimeLineCount = 0.0;
         linePerSecond = 0.0;
         linesPerClick = 1;
@@ -87,10 +89,13 @@ public class Game {
         activeUpgradeList.clear();
         for (Upgrade upgrade : upgradeList) {
             if (upgrade.getCost() <= lifetimeLineCount) {
-                activeUpgradeList.add(upgrade);
-                if (upgradeAdapter != null) {
-                    //upgradeAdapter.notifyItemInserted(activeUpgradeList.indexOf(upgrade));
-                    upgradeAdapter.notifyDataSetChanged();
+                if ((upgrade.getType().equals(UpgradeType.GENERATOR_EFFICIENCY) && upgrade.getGenerator().getCount() > 0) ||
+                        !upgrade.getType().equals(UpgradeType.GENERATOR_EFFICIENCY)) {
+                    activeUpgradeList.add(upgrade);
+                    if (upgradeAdapter != null) {
+                        //upgradeAdapter.notifyItemInserted(activeUpgradeList.indexOf(upgrade));
+                        upgradeAdapter.notifyDataSetChanged();
+                    }
                 }
             }
         }

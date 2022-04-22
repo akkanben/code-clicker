@@ -2,6 +2,7 @@ package com.crudalchemy.codeclicker.room;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.crudalchemy.codeclicker.activity.Game;
@@ -13,13 +14,13 @@ import java.util.List;
 @Dao
 public interface CodeClickerDao
 {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void insertGame(Game game);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void insertGenerator(Generator generator);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void insertUpgrade(Upgrade upgrade);
 
     @Query("SELECT * FROM Game")
