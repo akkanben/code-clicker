@@ -22,9 +22,9 @@ public class InitializeStoreItems {
 
 
         // GENERATORS
-        generatorList.add(new Generator((long) generatorList.size(), "Coffee", R.drawable.coffee_mug,"Liquid focus", 15, 1.15, 0.55));
-        generatorList.add(new Generator((long) generatorList.size(), "Monitor", R.drawable.monitor_1,"If TWO are this useful...", 300, 1.15, 5));
-        generatorList.add(new Generator((long) generatorList.size(), "RAM", R.drawable.ram, "More Stack Overflow tabs at once", 720, 1.14, 15));
+        generatorList.add(new Generator((long) generatorList.size(), "Coffee", R.drawable.coffee_mug,"Liquid focus", 15, 1.15, 0.75));
+        generatorList.add(new Generator((long) generatorList.size(), "Monitor", R.drawable.monitor_1,"If TWO are this useful...", 300, 1.15, 5.6));
+        generatorList.add(new Generator((long) generatorList.size(), "RAM", R.drawable.ram, "More Stack Overflow tabs at once", 720, 1.14, 25));
         generatorList.add(new Generator((long) generatorList.size(), "Storage", R.drawable.hard_drive_hdd, "Hard drive is full -- time for a new hard drive", 8640, 1.13, 360));
         generatorList.add(new Generator((long) generatorList.size(), "Server", R.drawable.server_rack,"Stack em' up like pancakes", 103680, 1.12, 2160));
         generatorList.add(new Generator((long) generatorList.size(), "AI Assistant", R.drawable.robot_binary,"\"NULL POINTER AT: FIRST DIRECTIVE\"", 803680, 1.11, 25160));
@@ -33,7 +33,6 @@ public class InitializeStoreItems {
         upgradeList.add(new Upgrade((long) upgradeList.size(), "Demo Tool 1", R.drawable.cash_funding_loot_money_1, "Boost", 100, DEMO_BOOST));
         upgradeList.add(new Upgrade((long) upgradeList.size(), "Demo Tool 2", R.drawable.cash_funding_loot_money_2, "Boost", 1000, DEMO_BOOST));
         upgradeList.add(new Upgrade((long) upgradeList.size(), "Demo Tool 3", R.drawable.cash_funding_loot_money_3, "Boost", 100000, DEMO_BOOST));
-        upgradeList.add(new Upgrade((long) upgradeList.size(), "Demo Tool 4", R.drawable.cash_funding_loot_money_3, "Boost", 1000000, DEMO_BOOST));
         upgradeList.add(new Upgrade((long) upgradeList.size(), "Singularity", R.drawable.singularity, "Boost", 10000000, SINGULARITY));
 
         // KEY PRESS UPGRADES

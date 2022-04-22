@@ -135,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                             if (game.getSaveTimer() == 1)
                                 snackbar.setVisibility(View.INVISIBLE);
-
                             game.updatePurchasableInActiveLists(generatorAdapter, upgradeAdapter);
                             double temp = game.currentLineCount + (game.linePerSecond * game.partsOfASecond);
                             tickerTextView.setText(LargeNumbers.convert(temp));
@@ -339,23 +338,23 @@ public class MainActivity extends AppCompatActivity {
 
     public void showPopupGeneratorDialogBox()
     {
-        int bgStreamId = soundPool.play(soundEffectsArray[5],0.35f,0.35f,1,-1,1);
+//        int bgStreamId = soundPool.play(soundEffectsArray[5],0.35f,0.35f,1,-1,1);
 
 
 
-        generatorDialog.setOnDismissListener(d -> {
-            soundPool.setVolume(bgStreamId, 0,0);
-        });
+//        generatorDialog.setOnDismissListener(d -> {
+//            soundPool.setVolume(bgStreamId, 0,0);
+//        });
         generatorDialog.show();
     }
 
 
     public void showPopupUpgradesDialogBox()
     {
-        int bgStreamId = soundPool.play(soundEffectsArray[5],0.35f,0.35f,1,-1,1);
-        upgradeDialog.setOnDismissListener(d -> {
-            soundPool.setVolume(bgStreamId, 0,0);
-        });
+//        int bgStreamId = soundPool.play(soundEffectsArray[5],0.35f,0.35f,1,-1,1);
+//        upgradeDialog.setOnDismissListener(d -> {
+//            soundPool.setVolume(bgStreamId, 0,0);
+//        });
         upgradeDialog.show();
     }
 
