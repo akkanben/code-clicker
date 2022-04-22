@@ -64,11 +64,15 @@ public class Game {
                 upgrade.getGenerator().setCurrentProductivity(activeProductivity * 2);
                 break;
             case GLOBAL_LINE_PRODUCTION_MULTIPLIER:
-                linePerSecond *= 1.01;
+                linePerSecond += lifetimeLineCount * 0.01;
                 break;
             case CLICK_EFFICIENCY:
                 linesPerClick *= 2;
                 break;
+            case DEMO_BOOST:
+                linePerSecond = Math.pow(linePerSecond, 2) * 2;
+            case SINGULARITY:
+                // goto activity
         }
         upgrade.setPurchased(true);
         upgradeList.remove(upgrade);
