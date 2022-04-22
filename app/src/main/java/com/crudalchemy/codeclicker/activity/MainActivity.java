@@ -11,6 +11,7 @@ import androidx.room.Room;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -47,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
     TextView linesPerSecondTextView;
     TextView snackbar;
     SoundPool soundPool;
-
-    int[] lineBonusArr = new int[5];
   
     int[] soundEffectsArray;
     CodeClickerDatabase codeClickerDatabase;
@@ -97,12 +96,6 @@ public class MainActivity extends AppCompatActivity {
         }
         setupDialogBoxes();
         setUpSaveLoad();
-
-        lineBonusArr[0] = (R.id.main_plus_one_text_view);
-        lineBonusArr[1] = (R.id.main_plus_two_text_view);
-        lineBonusArr[2] = (R.id.main_plus_three_text_view);
-        lineBonusArr[3] = (R.id.main_plus_four_text_view);
-        lineBonusArr[4] = (R.id.main_plus_five_text_view);
 
         gameLoop = new GameLoop("game");
         gameLoop.start();
@@ -200,9 +193,6 @@ public class MainActivity extends AppCompatActivity {
                         game.lifetimeLineCount += game.linesPerClick;
                         game.currentLineCount += game.linesPerClick;
                         animateKeyPress();
-                        Random randView = new Random();
-                        TextView increaseView = (TextView) findViewById(lineBonusArr[randView.nextInt(5)]);
-                        increaseView.setText("+" + game.linesPerClick);
                     });
                 }
                 else if(motionEvent.getAction() == MotionEvent.ACTION_UP)
@@ -402,4 +392,18 @@ public class MainActivity extends AppCompatActivity {
         int bgSong = soundPool.load(this,R.raw.electronicdrums,1);
         soundEffectsArray = new int[]{keyA, keyB, keyC, keyD, keyE, bgSong};
     }
+
+    private void killscreen() {
+
+        //game.linePerSecond = 0;
+
+        //TextView lineRateCounter = (TextView) findViewById(R.id.text_view_main_activity_lines_per_second);
+        //TextView lineCounter = (TextView) findViewById(R.id.text_view_main_activity_counter);
+        //lineRateCounter.setText("INTEGER_OVERFLOW");
+        //lineCounter.setText("ERRRRRRRRRR lines");
+
+        Intent goToKillscreen = new Intent(MainActivity.this, KillscreenActivity.class);
+        startActivity(goToKillscreen);
+    }
+
 }

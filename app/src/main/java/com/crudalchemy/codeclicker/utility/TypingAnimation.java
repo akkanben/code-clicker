@@ -22,13 +22,13 @@ public class TypingAnimation {
         String testCodeStr2 = "Test it again";
         String testCodeStr3 = "Third test";
 
-        codeTextStringList.add(testCodeStr1);
-        codeTextStringList.add(testCodeStr2);
-        codeTextStringList.add(testCodeStr3);
-        //codeTextStringList.add(helloWorldCodeStr);
+        //codeTextStringList.add(testCodeStr1);
+        //codeTextStringList.add(testCodeStr2);
+        //codeTextStringList.add(testCodeStr3);
+        codeTextStringList.add(helloWorldCodeStr);
         //codeTextStringList.add(recursiveRemoveCodeStr);
-        //codeTextStringList.add(infiniteOkayCodeStr);
-        //codeTextStringList.add(brevityExceptionCodeStr);
+        codeTextStringList.add(infiniteOkayCodeStr);
+        codeTextStringList.add(brevityExceptionCodeStr);
         codeTextStringList.add(metaCodingCodeStr);
 
         return codeTextStringList;
