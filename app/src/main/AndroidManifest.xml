@@ -21,6 +21,8 @@
         <activity
             android:name=".activity.SplashScreenActivity"
             android:exported="true">
+<!--            android:theme="@style/Theme.AppCompat.Light.NoActionBar"-->
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
