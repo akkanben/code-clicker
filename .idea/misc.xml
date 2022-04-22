@@ -6,6 +6,11 @@
         <entry key="../../../../../../layout/custom_preview.xml" value="0.28072916666666664" />
         <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/drawable/ic_launcher_background.xml" value="0.485" />
         <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/drawable/test_image.xml" value="0.5155" />
+<<<<<<< HEAD
+        <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/font/custom_fonts.xml" value="0.4947916666666667" />
+        <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/layout/activity_splash_screen.xml" value="0.5541666666666667" />
+=======
+>>>>>>> dev
         <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/layout/activity_upgrade_menu.xml" value="0.4438405797101449" />
         <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/layout/activity_upgrade_menu_recycler_view_adapter.xml" value="0.5536458333333333" />
         <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/layout/custom_dialog.xml" value="0.41041666666666665" />
@@ -19,6 +24,7 @@
         <entry key="app/src/main/res/layout/fragment_upgrade_item.xml" value="0.565625" />
         <entry key="app/src/main/res/layout/layout_activity_main.xml" value="0.565625" />
         <entry key="app/src/main/res/layout/popup_generator.xml" value="0.4583333333333333" />
+        <entry key="app/src/main/res/layout/popup_upgrades.xml" value="0.5148148148148148" />
       </map>
     </option>
   </component>

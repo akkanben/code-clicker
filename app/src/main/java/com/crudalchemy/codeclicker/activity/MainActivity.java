@@ -90,10 +90,12 @@ public class MainActivity extends AppCompatActivity {
                 .allowMainThreadQueries() // TODO: remove this at some point.
                 .fallbackToDestructiveMigration()
                 .build();
-
-        game = new Game();
+        game = loadGame();
+        if (game == null) {
+            game = new Game();
+            hardCodedStoreItems(game);
+        }
         setupDialogBoxes();
-        hardCodedStoreItems(game);
         setUpSaveLoad();
 
         lineBonusArr[0] = (R.id.main_plus_one_text_view);
@@ -213,9 +215,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveGame() {
-        codeClickerDatabase.dao().clearGame();
-        codeClickerDatabase.dao().clearGenerator();
-        codeClickerDatabase.dao().clearUpgrade();
+        //codeClickerDatabase.dao().clearGame();
+        //codeClickerDatabase.dao().clearGenerator();
+        //codeClickerDatabase.dao().clearUpgrade();
         codeClickerDatabase.dao().insertGame(game);
         for (Generator generator : game.getGeneratorList()) {
             codeClickerDatabase.dao().insertGenerator(generator);
@@ -225,15 +227,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-        private void setUpSaveLoad() {
-        Button saveButton = findViewById(R.id.save);
-        Button loadButton = findViewById(R.id.load);
-        saveButton.setOnClickListener(view -> {
-            saveGame();
-        });
-        loadButton.setOnClickListener(view -> {
-            List<Generator> generatorList = codeClickerDatabase.dao().findAllGenerators();
-            List<Upgrade> upgradeList = codeClickerDatabase.dao().findAllUpgrades();
+    private Game loadGame() {
+        List<Generator> generatorList = codeClickerDatabase.dao().findAllGenerators();
+        List<Upgrade> upgradeList = codeClickerDatabase.dao().findAllUpgrades();
+        game = codeClickerDatabase.dao().find();
+        if (generatorList != null && upgradeList != null && game != null) {
+            //codeClickerDatabase.dao().clearGame();
+            //codeClickerDatabase.dao().clearUpgrade();
+            //codeClickerDatabase.dao().clearGenerator();
             for(Upgrade upgrade : upgradeList)
             {
                 if(upgrade.getType().equals(GENERATOR_EFFICIENCY))
@@ -243,9 +244,27 @@ public class MainActivity extends AppCompatActivity {
                     upgrade.setGenerator(generators.get(0));
                 }
             }
-            game = codeClickerDatabase.dao().find();
             game.setGeneratorList(generatorList);
             game.setUpgradeList(upgradeList);
+            game.setActiveGeneratorList(new ArrayList<>());
+            game.setActiveUpgradeList(new ArrayList<>());
+            game.fillActiveLists(generatorAdapter, upgradeAdapter);
+            game.updatePurchasableInActiveLists(generatorAdapter, upgradeAdapter);
+            return game;
+        } else {
+            return null;
+        }
+    }
+
+    // CURRENTLY HIDDEN
+    private void setUpSaveLoad() {
+        Button saveButton = findViewById(R.id.save);
+        Button loadButton = findViewById(R.id.load);
+        saveButton.setOnClickListener(view -> {
+            saveGame();
+        });
+        loadButton.setOnClickListener(view -> {
+            loadGame();
         });
     }
 
@@ -361,7 +380,6 @@ public class MainActivity extends AppCompatActivity {
     public void playRandomKeyboardPressSound()
     {
         Random rand = new Random();
-
         soundPool.play(soundEffectsArray[rand.nextInt(5)], (float) 0.65, (float) 0.65,1,0, 1);
     }
 
@@ -381,9 +399,7 @@ public class MainActivity extends AppCompatActivity {
         int keyC = soundPool.load(this, R.raw.new_key03, 1);
         int keyD = soundPool.load(this, R.raw.new_key04, 1);
         int keyE = soundPool.load(this, R.raw.new_key05, 1);
-        int bgSong = soundPool.load(this,R.raw.electronicsoul,1);
+        int bgSong = soundPool.load(this,R.raw.electronicdrums,1);
         soundEffectsArray = new int[]{keyA, keyB, keyC, keyD, keyE, bgSong};
-
-
     }
 }
