@@ -32,6 +32,8 @@ import com.crudalchemy.codeclicker.utility.LargeNumbers;
 import com.crudalchemy.codeclicker.utility.TypingAnimation;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.w3c.dom.Text;
+
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     TextView linesPerSecondTextView;
     TextView snackbar;
     SoundPool soundPool;
+
+    int[] lineBonusArr = new int[5];
   
     int[] soundEffectsArray;
     CodeClickerDatabase codeClickerDatabase;
@@ -69,16 +73,6 @@ public class MainActivity extends AppCompatActivity {
         snackbar = findViewById(R.id.main_activity_text_view_snackbar);
         snackbar.setText("Game Saved");
 
-        codeTextStringList.add(helloWorldCodeStr);
-        codeTextStringList.add(recursiveRemoveCodeStr);
-        codeTextStringList.add(infiniteOkayCodeStr);
-        /*codeTextStringList.add();
-        codeTextStringList.add();
-        codeTextStringList.add();
-        codeTextStringList.add();
-        codeTextStringList.add();*/
-
-        currentCodeTextStr = codeTextStringList.get(0);
         codeTextStringList = TypingAnimation.setupTypingAnimStrings();
         currentCodeTextStr = codeTextStringList.get(0);
 
@@ -101,11 +95,19 @@ public class MainActivity extends AppCompatActivity {
         setupDialogBoxes();
         hardCodedStoreItems(game);
         setUpSaveLoad();
+
+        lineBonusArr[0] = (R.id.main_plus_one_text_view);
+        lineBonusArr[1] = (R.id.main_plus_two_text_view);
+        lineBonusArr[2] = (R.id.main_plus_three_text_view);
+        lineBonusArr[3] = (R.id.main_plus_four_text_view);
+        lineBonusArr[4] = (R.id.main_plus_five_text_view);
+
         gameLoop = new GameLoop("game");
         gameLoop.start();
 
         setupPopupGeneratorButton();
         setupPopupUpgradesButton();
+
     }
 
     class GameLoop implements Runnable {
@@ -196,6 +198,9 @@ public class MainActivity extends AppCompatActivity {
                         game.lifetimeLineCount += game.linesPerClick;
                         game.currentLineCount += game.linesPerClick;
                         animateKeyPress();
+                        Random randView = new Random();
+                        TextView increaseView = (TextView) findViewById(lineBonusArr[randView.nextInt(5)]);
+                        increaseView.setText("+" + game.linesPerClick);
                     });
                 }
                 else if(motionEvent.getAction() == MotionEvent.ACTION_UP)
