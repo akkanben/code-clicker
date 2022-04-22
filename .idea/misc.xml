@@ -6,6 +6,11 @@
         <entry key="../../../../../../layout/custom_preview.xml" value="0.28072916666666664" />
         <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/drawable/ic_launcher_background.xml" value="0.485" />
         <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/drawable/test_image.xml" value="0.5155" />
+<<<<<<< HEAD
+        <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/font/custom_fonts.xml" value="0.4947916666666667" />
+        <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/layout/activity_splash_screen.xml" value="0.5541666666666667" />
+=======
+>>>>>>> dev
         <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/layout/activity_upgrade_menu.xml" value="0.4438405797101449" />
         <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/layout/activity_upgrade_menu_recycler_view_adapter.xml" value="0.5536458333333333" />
         <entry key="..\:/Users/trega/codefellows/401/java/code-clicker/app/src/main/res/layout/custom_dialog.xml" value="0.41041666666666665" />
