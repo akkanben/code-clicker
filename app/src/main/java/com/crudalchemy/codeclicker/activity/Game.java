@@ -72,7 +72,12 @@ public class Game {
             case DEMO_BOOST:
                 linePerSecond = Math.pow(linePerSecond, 2) * 2;
             case SINGULARITY:
-                // goto activity
+                linePerSecond = Math.pow(linePerSecond, 2) * 2;
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
         }
         upgrade.setPurchased(true);
         upgradeList.remove(upgrade);
