@@ -342,19 +342,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void showPopupGeneratorDialogBox()
     {
-//        int bgStreamId = soundPool.play(soundEffectsArray[5],0.35f,0.35f,1,-1,1);
-//        generatorDialog.setOnDismissListener(d -> {
-//            soundPool.setVolume(bgStreamId, 0,0);
-//        });
+        int bgStreamId = soundPool.play(soundEffectsArray[5],0.35f,0.35f,1,-1,1);
+        generatorDialog.setOnDismissListener(d -> {
+            soundPool.setVolume(bgStreamId, 0,0);
+        });
         generatorDialog.show();
     }
 
     public void showPopupUpgradesDialogBox()
     {
-//        int bgStreamId = soundPool.play(soundEffectsArray[5],0.35f,0.35f,1,-1,1);
-//        upgradeDialog.setOnDismissListener(d -> {
-//            soundPool.setVolume(bgStreamId, 0,0);
-//        });
+        int bgStreamId = soundPool.play(soundEffectsArray[5],0.35f,0.35f,1,-1,1);
+        upgradeDialog.setOnDismissListener(d -> {
+            soundPool.setVolume(bgStreamId, 0,0);
+        });
         upgradeDialog.show();
     }
 
@@ -380,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
         int keyC = soundPool.load(this, R.raw.new_key03, 1);
         int keyD = soundPool.load(this, R.raw.new_key04, 1);
         int keyE = soundPool.load(this, R.raw.new_key05, 1);
-        int bgSong = soundPool.load(this,R.raw.electronicdrums,1);
+        int bgSong = soundPool.load(this,R.raw.fr_short,1);
         soundEffectsArray = new int[]{keyA, keyB, keyC, keyD, keyE, bgSong};
     }
 

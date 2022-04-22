@@ -78,7 +78,7 @@ public class UpgradeMenuRecyclerViewAdapter extends RecyclerView.Adapter<Upgrade
            purchaseButton.setEnabled(true);
            purchaseButton.setOnClickListener(view -> {
                game.buyUpgrade(currentUpgrade);
-//               soundPool.play(buySound,1,1,1,0,1);
+               soundPool.play(buySound,1,1,1,0,1);
                UpgradeMenuRecyclerViewAdapter.this.notifyItemRemoved(position);
            });
        }
