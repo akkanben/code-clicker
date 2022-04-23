@@ -380,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
         int keyC = soundPool.load(this, R.raw.new_key03, 1);
         int keyD = soundPool.load(this, R.raw.new_key04, 1);
         int keyE = soundPool.load(this, R.raw.new_key05, 1);
-        int bgSong = soundPool.load(this,R.raw.fr_short,1);
+        int bgSong = soundPool.load(this,R.raw.flowing_rocks_short,1);
         soundEffectsArray = new int[]{keyA, keyB, keyC, keyD, keyE, bgSong};
     }
 
