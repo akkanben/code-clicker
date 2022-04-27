@@ -1,18 +1,35 @@
 # code-clicker
 
+![code clicker logo](./readme-images/logo.png)
+
 Fun idle clicker with a coding theme.
 
-## Team Members
+## Features
 
-- Ben Mills
-- Tony Regalado
-- Robb Alexander
-- Hambalieu Jallow
+- Casual, addictive gameplay
+- 6 Generator items
+- ~48 upgrade items
+- Local saving via Android Room SQLite database
 
-[User Stories](https://trello.com/codeclicker2)
+## Images
 
-[Team Agreement](./team-agreement.md)
+![splash screen](./readme-images/splash.png)
+![main](./readme-images/main-01.png)
 
-[Software Requirements](./requirements.md)
+![items](./readme-images/generators.png)
+![upgrades](./readme-images/upgrades.png)
 
-[Wireframes & Domain Modeling](https://excalidraw.com/#room=f2470210340b57ba26cf,r-Mx0zdHFWCZEedJAhICNQ)
+## Planning 
+
+- [Models & wireframe](./readme-images/planning.png)
+
+## Acknowledgements 
+
+Code Clicker was created by:
+
+- [Hambalieu Jallow](https://github.com/Hambalieu)
+- [Robb Alexander](https://github.com/RobbMAlexander)
+- [Tony Regalado](https://github.com/Edward-Regalado)
+- [Ben Mills](https://github.com/akkanben)
+
+Art assets for computer, items, and upgrades by [Flaticon](https://www.flaticon.com/)
